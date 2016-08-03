@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<title>bioinformatics_notebook</title>
+
+
+<style type="text/css">
+body {
+  font-family: Helvetica, arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+  padding: 30px; }
+
+body > *:first-child {
+  margin-top: 0 !important; }
+body > *:last-child {
+  margin-bottom: 0 !important; }
+
+a {
+  color: #4183C4; }
+a.absent {
+  color: #cc0000; }
+a.anchor {
+  display: block;
+  padding-left: 30px;
+  margin-left: -30px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+  cursor: text;
+  position: relative; }
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA09pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoMTMuMCAyMDEyMDMwNS5tLjQxNSAyMDEyLzAzLzA1OjIxOjAwOjAwKSAgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OUM2NjlDQjI4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OUM2NjlDQjM4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5QzY2OUNCMDg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5QzY2OUNCMTg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PsQhXeAAAABfSURBVHjaYvz//z8DJYCRUgMYQAbAMBQIAvEqkBQWXI6sHqwHiwG70TTBxGaiWwjCTGgOUgJiF1J8wMRAIUA34B4Q76HUBelAfJYSA0CuMIEaRP8wGIkGMA54bgQIMACAmkXJi0hKJQAAAABJRU5ErkJggg==) no-repeat 10px center;
+  text-decoration: none; }
+
+h1 tt, h1 code {
+  font-size: inherit; }
+
+h2 tt, h2 code {
+  font-size: inherit; }
+
+h3 tt, h3 code {
+  font-size: inherit; }
+
+h4 tt, h4 code {
+  font-size: inherit; }
+
+h5 tt, h5 code {
+  font-size: inherit; }
+
+h6 tt, h6 code {
+  font-size: inherit; }
+
+h1 {
+  font-size: 28px;
+  color: black; }
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #cccccc;
+  color: black; }
+
+h3 {
+  font-size: 18px; }
+
+h4 {
+  font-size: 16px; }
+
+h5 {
+  font-size: 14px; }
+
+h6 {
+  color: #777777;
+  font-size: 14px; }
+
+p, blockquote, ul, ol, dl, li, table, pre {
+  margin: 15px 0; }
+
+hr {
+  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC) repeat-x 0 0;
+  border: 0 none;
+  color: #cccccc;
+  height: 4px;
+  padding: 0;
+}
+
+body > h2:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+body > h1:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+  body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0; }
+body > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0; }
+
+h1 p, h2 p, h3 p, h4 p, h5 p, h6 p {
+  margin-top: 0; }
+
+li p.first {
+  display: inline-block; }
+li {
+  margin: 0; }
+ul, ol {
+  padding-left: 30px; }
+
+ul :first-child, ol :first-child {
+  margin-top: 0; }
+
+dl {
+  padding: 0; }
+  dl dt {
+    font-size: 14px;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin: 15px 0 5px; }
+    dl dt:first-child {
+      padding: 0; }
+    dl dt > :first-child {
+      margin-top: 0; }
+    dl dt > :last-child {
+      margin-bottom: 0; }
+  dl dd {
+    margin: 0 0 15px;
+    padding: 0 15px; }
+    dl dd > :first-child {
+      margin-top: 0; }
+    dl dd > :last-child {
+      margin-bottom: 0; }
+
+blockquote {
+  border-left: 4px solid #dddddd;
+  padding: 0 15px;
+  color: #777777; }
+  blockquote > :first-child {
+    margin-top: 0; }
+  blockquote > :last-child {
+    margin-bottom: 0; }
+
+table {
+  padding: 0;border-collapse: collapse; }
+  table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0; }
+    table tr:nth-child(2n) {
+      background-color: #f8f8f8; }
+    table tr th {
+      font-weight: bold;
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr td {
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr th :first-child, table tr td :first-child {
+      margin-top: 0; }
+    table tr th :last-child, table tr td :last-child {
+      margin-bottom: 0; }
+
+img {
+  max-width: 100%; }
+
+span.frame {
+  display: block;
+  overflow: hidden; }
+  span.frame > span {
+    border: 1px solid #dddddd;
+    display: block;
+    float: left;
+    overflow: hidden;
+    margin: 13px 0 0;
+    padding: 7px;
+    width: auto; }
+  span.frame span img {
+    display: block;
+    float: left; }
+  span.frame span span {
+    clear: both;
+    color: #333333;
+    display: block;
+    padding: 5px 0 0; }
+span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-center > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: center; }
+  span.align-center span img {
+    margin: 0 auto;
+    text-align: center; }
+span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px 0 0;
+    text-align: right; }
+  span.align-right span img {
+    margin: 0;
+    text-align: right; }
+span.float-left {
+  display: block;
+  margin-right: 13px;
+  overflow: hidden;
+  float: left; }
+  span.float-left span {
+    margin: 13px 0 0; }
+span.float-right {
+  display: block;
+  margin-left: 13px;
+  overflow: hidden;
+  float: right; }
+  span.float-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: right; }
+
+code, tt {
+  margin: 0 2px;
+  padding: 0 5px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px; }
+
+pre code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent; }
+
+.highlight pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+  pre code, pre tt {
+    background-color: transparent;
+    border: none; }
+
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:0 auto;
+    }
+}
+@media print {
+	table, pre {
+		page-break-inside: avoid;
+	}
+	pre {
+		word-wrap: break-word;
+	}
+}
+</style>
+
+<style type="text/css">
+/*
+ Solarized Color Schemes originally by Ethan Schoonover
+ http://ethanschoonover.com/solarized
+
+ Ported for PrismJS by Hector Matos
+ Website: https://krakendev.io
+ Twitter Handle: https://twitter.com/allonsykraken)
+*/
+
+/*
+SOLARIZED HEX
+--------- -------
+base03    #002b36
+base02    #073642
+base01    #586e75
+base00    #657b83
+base0     #839496
+base1     #93a1a1
+base2     #eee8d5
+base3     #fdf6e3
+yellow    #b58900
+orange    #cb4b16
+red       #dc322f
+magenta   #d33682
+violet    #6c71c4
+blue      #268bd2
+cyan      #2aa198
+green     #859900
+*/
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #657b83; /* base00 */
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+	background: #073642; /* base02 */
+}
+
+pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+code[class*="language-"]::selection, code[class*="language-"] ::selection {
+	background: #073642; /* base02 */
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background-color: #fdf6e3; /* base3 */
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #93a1a1; /* base1 */
+}
+
+.token.punctuation {
+	color: #586e75; /* base01 */
+}
+
+.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #268bd2; /* blue */
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.url,
+.token.inserted {
+	color: #2aa198; /* cyan */
+}
+
+.token.entity {
+	color: #657b83; /* base00 */
+	background: #eee8d5; /* base2 */
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+	color: #859900; /* green */
+}
+
+.token.function {
+	color: #b58900; /* yellow */
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+	color: #cb4b16; /* orange */
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+</style>
+
+<style type="text/css">
+div.prism-show-language {
+	position: relative;
+}
+
+div.prism-show-language > div.prism-show-language-label {
+	color: black;
+	background-color: #CFCFCF;
+	display: inline-block;
+	position: absolute;
+	bottom: auto;
+	left: auto;
+	top: 0;
+	right: 0;
+	width: auto;
+	height: auto;
+	font-size: 0.9em;
+	border-radius: 0 0 0 5px;
+	padding: 0 0.5em;
+	text-shadow: none;
+	z-index: 1;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	-webkit-transform: none;
+	-moz-transform: none;
+	-ms-transform: none;
+	-o-transform: none;
+	transform: none;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<h1 id="toc_0">July 19th, 2016</h1>
+
+<hr>
+
+<p>Tim Stuart has provided new files to attempt the trans TE-DMR analysis for his manuscript. Previously, both TEPID insertions and deletions were combined into a &#39;TE_poly&#39; file containing both types of elements. However, further analysis by Tim has indicated that it may be worthwhile to look at these two types of variants seperatly. Beyond this, there was an issue with the methylation DMR files indicating no coverage as a value of 0, which could seriously screw things up.</p>
+
+<p>Therefore, I am revisiting the TE-DMR trans association analysis and performing it four times for these datasets:</p>
+
+<ul>
+<li>C DMRs (13484) vs TE insertions (15077)</li>
+<li>C DMRs (13484) vs TE deletions (5856)</li>
+<li>CG DMRs (40268) vs TE insertions (15077)</li>
+<li>CG DMRs (40268) vs TE deletions (5856)</li>
+</ul>
+
+<p>Tim has provided new files for methylation <code>c_dmr_allC.tsv</code> and <code>cg_dmrs_allC.tsv</code> as well as new dataframes of TE insertions <code>TE_insertions_matrix.tsv</code> and deletions <code>TE_deletions_matrix.tsv</code></p>
+
+<p>All code and results for each analysis are found in their respective folder and <code>TIM_TRANS_ANALYSIS_JULY2016.html</code> file.</p>
+
+<p>To begin, dataset accessions are confirmed identical resulting in 136 accessions. We trim this down to 124 accessions that were identified in the TE-to-SNP LD analysis to eliminate some of the populations structure found across these accessions.</p>
+
+<p>TE variants are subset to only those &#39;common&#39; variants with a minor-allele-frequence &gt; 3% (4 accessions). This substantially cuts down on the number of TE variants that we can test:</p>
+
+<table>
+<thead>
+<tr>
+<th>TE set</th>
+<th>raw variants</th>
+<th>&gt;3% MAF</th>
+<th>proportion kept</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>insertions</td>
+<td>15077</td>
+<td>2782</td>
+<td>0.185</td>
+</tr>
+<tr>
+<td>deletions</td>
+<td>5856</td>
+<td>2859</td>
+<td>0.488</td>
+</tr>
+</tbody>
+</table>
+
+<p>We can also calculate the FDR for each of these association tests by counting the number of associations above our 1% permuted data threshold as so:</p>
+
+<p>(count above real - count above perm) / (count above real)</p>
+
+<p>Which gives us....not the best FDR in the world:</p>
+
+<table>
+<thead>
+<tr>
+<th>FDR %</th>
+<th>individual r2 values</th>
+<th>sum r2 values</th>
+<th>individual binary states</th>
+<th>sum binary states</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>C_ins</td>
+<td>14.38</td>
+<td>87.77</td>
+<td>14.38</td>
+<td>77.77</td>
+</tr>
+<tr>
+<td>C_del</td>
+<td>17.17</td>
+<td>87.65</td>
+<td>17.16</td>
+<td>81.29</td>
+</tr>
+<tr>
+<td>CG_ins</td>
+<td>7.55</td>
+<td>52.54</td>
+<td>7.55</td>
+<td>21.62</td>
+</tr>
+<tr>
+<td>CG_del</td>
+<td>10.27</td>
+<td>47.27</td>
+<td>10.26</td>
+<td>25</td>
+</tr>
+</tbody>
+</table>
+
+<p>Even so, we can get a count of our punative trans-associated TE variants for each contrast:</p>
+
+<table>
+<thead>
+<tr>
+<th>possible trans Tes</th>
+<th>count</th>
+<th>max DMRs it hits</th>
+<th>max %DMRs it hits</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>C_ins</td>
+<td>126</td>
+<td>526</td>
+<td>3.901</td>
+</tr>
+<tr>
+<td>C_del</td>
+<td>155</td>
+<td>457</td>
+<td>3.389</td>
+</tr>
+<tr>
+<td>CG_ins</td>
+<td>37</td>
+<td>2021</td>
+<td>5.019</td>
+</tr>
+<tr>
+<td>CG_del</td>
+<td>40</td>
+<td>2395</td>
+<td>5.948</td>
+</tr>
+</tbody>
+</table>
+
+<p>So if I&#39;m honest, I think we don&#39;t really have any evidence of trans bands. In fact, if we look at the plotted heatmaps it is much harder to identify the cis-band going up the diagonals of the C DMR set.</p>
+
+<p>If anything, we see lots of horizontal bands, which may indicate that we would need to do some heavy filtering of the Schmitz DMR calls in order to try and clear things up. I&#39;m not sure how to best approach that however.</p>
+
+<h1 id="toc_1">June 17th, 2016</h1>
+
+<hr>
+
+<p>There are some revisions to be done in regards to the Brachypodium distachyon reference methylomes manuscript. I am trying to organize my thoughts and scripts to have a clearer picture of exactly what is being done and where any new analyses will fit in:</p>
+
+<p>In the end what I, and everyone else, should be doing is identifying the time in which a manuscript will be created and directly begin organizational steps in order to prepare for publication and reproducibility.</p>
+
+<p>There are key steps to making this a reality</p>
+
+<ul>
+<li><p><strong>Start by uploading any created sequencing data to a public repo EARLY ON.</strong> By doing so you have completed one of the most annoying steps of any genomic paper prep. A specific benifit of doing this early on is that you can develop your analysis scripts to start directly from pulling sequence data (e.g. from the SRA). If you are smart you can create scripts that can flag off this step for subsequent analyses when you have the sequencing data in hand (the same holds true for any time-consuming steps such as read alignment).</p></li>
+<li><p><strong>Keep an up-to-date tab on any third-party data that is used within your analyses.</strong> Everythign we do often builds on other labs data, or other public annotation information that is associated with your experimental system. This includes reference genome(s), gene annotations, and other public annotations which may be used within your analysis. By knowing what <em>version</em> as well as the public <em>location</em> of such data (TAIR, Phytozome, genome connsortium, etc) you will make your own life, and others reproducing your results, easier.</p></li>
+<li><p><strong>Timestamp everything.</strong> Analysis often beings in a &#39;dirty phase&#39; of analysis with rapid testing and code/plots/data tables that are good, bad, and ugly. Often you begin building off of these for downstream steps. You often never know that a specific step or output will make it out of this phase. Devise a clear timestamp method for any output of any script. This allows you to keep track of when certain files were made, and forces a clear naming convention for your own sanity.</p></li>
+<li><p><strong>Try to get as close to final publication figures from first output.</strong> From my experience, the effort you put into a &#39;final&#39; figure is often left behind when the &#39;final&#39; figure is no longer actually final. There are often changes, edits, tweaks that may require a new primary figure or plot to be developed which is not always easy to slot into the edited manuscript figure. I have often spent a fair amount of time in Illustrator getting things just right only to have a <em>plot.v3USETHISONE.pdf</em> get spit out right at the end requiring an additional round of finalization for publication. This is inevitable as far as I can tell. Therefore, taking the time to make your plotting software (ggplot is my go to) get as close as possible to what you want in the end. This includes colors, legends, labels, font sizes, etc. The more you can code into your scripts, the easier it will be to deal with any last minute changes.</p></li>
+<li><p><strong>When you have completed all of this, make sure the first steps of the script highlight the required software, libraries, and disk space needed to make things work.</strong> If you make it this far, you may just have a script which will generate everything you made. Well done! However, take the time to clearly identify the specific software and libraries required for your scripts to work. Best practices would also include the specific versions of all items that you used as they seem to change and break things quite often.</p></li>
+</ul>
+
+<p>My personal goal would be to develop a series of scripts in which with the scripts alone it would:</p>
+
+<ul>
+<li>Download all primary data</li>
+<li>Download all annotation third-part data required</li>
+<li>Perform all base processing of data</li>
+<li>Perform all biological analyses performed in the paper</li>
+<li>Output semi-finished versions of all primary and supplemental figures and tables (noting that they may be cleaned further in Illustrator for publication)</li>
+</ul>
+
+<p>This is much easier said than done. I have yet to personally meet this goal. I imagine that this level of organization requires one to accept that you will get so far with first-pass analyses and developing your results, then have to <em>start from the beginning</em> with this organization in mind. Things should move faster at this point because you know where you are headed (rather than in discovery phase).</p>
+
+<p>I have also been continuing to try and find the best method for pulling scripts together to include code for all aspects of the required software. I often move from bash scripts to R, back to bash, and sometimes others which would require a more unified method. Right now I often develop R scripts with commented out bash code which I manually execute while walking through the script. I don&#39;t like doing this and either would any person trying to re-develop your results and analyses.</p>
+
+<p>I imagine that beyond this would be a magical world of VMs that someone could spin up to do all of this in the cloud, however I&#39;m still focused on these baby steps.</p>
+
+<h1 id="toc_2">May 9th, 2016</h1>
+
+<hr>
+
+<p>Trying to understand <em>Probability Theory - The Logic of Science</em> by E.T. Jaynes</p>
+
+<h3 id="toc_3">Probability defined for:</h3>
+
+<ul>
+<li>Frequency &amp; Fair odds 
+(dice rolls, gambling)</li>
+</ul>
+
+<p>vs </p>
+
+<ul>
+<li>credible, sound judgements
+(finding expectations from incomplete information)</li>
+</ul>
+
+<h2 id="toc_4">- Kolmogorov</h2>
+
+<h3 id="toc_5">Statistics</h3>
+
+<ul>
+<li>from the state for mathematical analysis of affairs</li>
+<li>defining measurement error</li>
+<li>sampling variation</li>
+</ul>
+
+<p>Laplace</p>
+
+<ul>
+<li>Linear regression</li>
+<li>Distribution of errors </li>
+</ul>
+
+<p>Inference (Fisher &amp; Pearson)</p>
+
+<ul>
+<li>How do we infer the true &#39;state of being&#39;?</li>
+<li>p-values</li>
+<li>confidence intervals</li>
+<li>hypothesis testing</li>
+</ul>
+
+<p>Bayesian statistics</p>
+
+<ul>
+<li>How do prob estimates get updated given new data?</li>
+<li>conditional probabilities</li>
+</ul>
+
+<p>Given all of this, what exactly is probability in the real world?</p>
+
+<h3 id="toc_6">Freqentist</h3>
+
+<ul>
+<li>counting, <em>measurements</em> of a physical prop, sampling, </li>
+<li>This only really makes sense when we can make the measurements
+vs</li>
+</ul>
+
+<h3 id="toc_7">Subjectionist</h3>
+
+<p><strong>&#39;A degree of belief&#39;</strong> - something we all have</p>
+
+<ul>
+<li>Given we cannot simulate worlds to test outcomes, what do we do when we cannot measure directly</li>
+<li>It is naturally uncomfortable to include our subjective degrees of belief</li>
+<li>What if we have different degrees of belief when we can properly test (roll the dice)?</li>
+<li>Kolmogorov axioms don&#39;t necessesarily fit well here</li>
+</ul>
+
+<p>Is probability forwarding looking and statistics backward looking?</p>
+
+<p>in this book, Jaynes frames probability as an extention of LOGIC specifically.
+We are reasoning with incomplete information. We can get Kolmogorov axioms as a derivitive of logic. From this, the separation of probability vs statistics dissapears. Also destroys frequentist ad hoceries and methods as a fundamental misunderstanding of probability.</p>
+
+<p>In doing so, Jaynes shows that a subjectionist view allows for more powerful statements.</p>
+
+<p>Hypothesis to Data (test hypothesis to explain our data) is not good. We want <strong>Data to hypothesis</strong> (the thing in the real world)</p>
+
+<h3 id="toc_8">Resolves about 400 years of prob theory by extending logic!</h3>
+
+<hr>
+
+<h1 id="toc_9">April 18th, 2016</h1>
+
+<hr>
+
+<p>Created folder structure on local machine for IGV sessions for Joanne&#39;s methylc-seq data visualizations.</p>
+
+<p>bis snp snp-calling from bisulfite sequencing data for Diep&#39;s work.</p>
+
+<hr>
+
+<h1 id="toc_10">April 14th, 2016</h1>
+
+<hr>
+
+<p>The alignments of Joanne&#39;s Methyl-seq data has been completed on edmund. The summary information is provided below:</p>
+
+<table>
+<thead>
+<tr>
+<th>Input fastq</th>
+<th>Sample</th>
+<th>ref genome</th>
+<th>method</th>
+<th>bismark ver</th>
+<th>samtools ver</th>
+<th>total reads</th>
+<th>flt reads</th>
+<th>% unique aligned</th>
+<th>unique map</th>
+<th>multi-map</th>
+<th>no-map</th>
+<th>%CG</th>
+<th>%CHG</th>
+<th>%CHH</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Col<em>mock</em>C_R1.fastq.gz</td>
+<td>Col<em>mock</em>3DAI</td>
+<td>../../genomes/TAIR10/assembly/</td>
+<td>se</td>
+<td>v0.13.0</td>
+<td>1.1-26-g29b0367</td>
+<td>32705946</td>
+<td>32652653</td>
+<td>78.1</td>
+<td>25507247</td>
+<td>1958063</td>
+<td>5187343</td>
+<td>23.2</td>
+<td>7.5</td>
+<td>2.2</td>
+</tr>
+<tr>
+<td>Col<em>Fox</em>D_R1.fastq.gz</td>
+<td>Col<em>Fox</em>3DPI</td>
+<td>../../genomes/TAIR10/assembly/</td>
+<td>se</td>
+<td>v0.13.0</td>
+<td>1.1-26-g29b0367</td>
+<td>29501104</td>
+<td>29460765</td>
+<td>67.6</td>
+<td>19925070</td>
+<td>5170754</td>
+<td>4364941</td>
+<td>21.8</td>
+<td>7.0</td>
+<td>2.1</td>
+</tr>
+<tr>
+<td>rdd<em>Fox</em>B_R1.fastq.gz</td>
+<td>rdd<em>Fox</em>3DPI</td>
+<td>../../genomes/TAIR10/assembly/</td>
+<td>se</td>
+<td>v0.13.0</td>
+<td>1.1-26-g29b0367</td>
+<td>29645007</td>
+<td>29612191</td>
+<td>67.7</td>
+<td>20055251</td>
+<td>5865639</td>
+<td>3691301</td>
+<td>23.0</td>
+<td>7.0</td>
+<td>2.0</td>
+</tr>
+<tr>
+<td>rdd<em>mock</em>A_R1.fastq.gz</td>
+<td>rdd<em>mock</em>3DPI</td>
+<td>../../genomes/TAIR10/assembly/</td>
+<td>se</td>
+<td>v0.13.0</td>
+<td>1.1-26-g29b0367</td>
+<td>36957919</td>
+<td>36915555</td>
+<td>80.1</td>
+<td>29574380</td>
+<td>1810380</td>
+<td>5530795</td>
+<td>23.6</td>
+<td>7.3</td>
+<td>2.1</td>
+</tr>
+</tbody>
+</table>
+
+<p>Another important note is calculating the bisulfite conversion rate by looking for methylated cytosines in the chloroplast (which is unmethylated). This can be done via the output files and a bash one-liner:</p>
+
+<div><pre><code class="language-bash">grep &quot;ChrC&quot; *CHH.bed.bismark.cov | awk &#39;{ met+= $5} { unmet += $6} { total = met + unmet } END {print 100-((met / total)*100)}&#39;</code></pre></div>
+
+<p>This results in the folowing conversion rates (higher the better):</p>
+
+<table>
+<thead>
+<tr>
+<th>Sample</th>
+<th>Conversion Rate (%)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Col<em>mock</em>3DPI</td>
+<td>99.6488</td>
+</tr>
+<tr>
+<td>Col<em>Fox</em>3DPI</td>
+<td>99.6395</td>
+</tr>
+<tr>
+<td>rdd<em>mock</em>3DPI</td>
+<td>99.6367</td>
+</tr>
+<tr>
+<td>rdd<em>Fox</em>3DPI</td>
+<td>99.6164</td>
+</tr>
+</tbody>
+</table>
+
+<p>So overall, it looks like conversion rate will not be a problem with this dataset. Although one can correct for it, it would make minimal difference with these rates.</p>
+
+<p>We can also look at global methylation levels to determine if there are any clear differences across samples.</p>
+
+<p>Start by pulling together base-pair resolution data for the four samples into a single file in R:</p>
+
+<div><pre><code class="language-r">
+context=c(&#39;CpG&#39;,&#39;CHG&#39;,&#39;CHH&#39;)
+for(i in 1:3){
+  out=NULL
+  files=dir(pattern=paste(&#39;*&#39;,context[i],&#39;.bed.bismark.cov&#39;,sep=&#39;&#39;))
+  input=read.delim(files[1],head=F)
+  colnames(input)[4:6]=paste(files[1],names(input)[4:6],sep=&#39;&#39;)
+  
+  for(q in 2:length(files)){
+    add=read.delim(files[q],head=F)
+    colnames(add)[4:6]=paste(files[q],names(add)[4:6],sep=&#39;&#39;)
+    input=merge(input,add,by=c(&#39;V1&#39;,&#39;V2&#39;,&#39;V3&#39;))
+  }
+ write.table(input,paste(context[i],&#39;_allsamples.cov&#39;,sep=&#39;\t&#39;,row.names=F,quote=F)
+}</code></pre></div>
+
+<p>Ran 100bp DMR caller for CG, 60% difference, 10coverage and at least 3 sites in the window.</p>
+
+<p>Also did CHG 40%; CHH 10%</p>
+
+<p>Have to do some serious filtering</p>
+
+<hr>
+
+<h1 id="toc_11">April 7th, 2016</h1>
+
+<hr>
+
+<p>Today I am attempting to make an annotation file of TAIR10 genes that have a flanking TE. This is to better define genes that fall on a euchromatin / heterochromatin boundary within the genome. I will also add information regarding orientation of chromatin in relation to the geen (5prime / 3prime / strand).</p>
+
+<p>My first attempts have used the <code>TAIR10_gene.bed</code> and the <code>TAIR10_transposable_element.bed</code> files, however I kept getting a Segmentation Fault when running on <em>edmund</em>. So, I will attempt it on my own laptop to see if results change:</p>
+
+<p>I still get segmentation faults after 12,957 lines when running:</p>
+
+<div><pre><code class="language-bash">closestBed -iu -D ref -a TAIN10_transposable_elements.bed -b TAIR10_gene.sorted.bed</code></pre></div>
+
+<p>Perhaps bedops will get the job done by giving the closest upstream <em>and</em> downstream elements. I can further require that it does not report overlaps via <code>--no-overlaps</code> and also report back the distance for each <code>--dist</code>. So, I could take all TAIR10 genes and map them against a file that contains all TAIR10 genes as well as all transposable elements:</p>
+
+<div><pre><code class="language-bash">closest-features --no-overlaps --dist --delim &#39;\t&#39; TAIR10_gene.sorted.bed TAIR10_gene_te.sorted.bed &gt; test.output</code></pre></div>
+
+<p>This reports out a bed-like file that contains:</p>
+
+<ul>
+<li>initial query sequence</li>
+<li>upstream hit (which would be itself if not for --no-overlaps)</li>
+<li>distance to upstream feature</li>
+<li>downstream hit</li>
+<li>distance to downstream feature</li>
+</ul>
+
+<p>These sections are all seperated by tabs as specified in the <code>--delim &#39;\t&#39;</code> flag</p>
+
+<p>Need to make sure that the TE and gene files that are combined contain the same number of columns. Added two columns of NA to the gene file to match the number found in the TE file.</p>
+
+<div><pre><code class="language-r">gene=read.delim(&#39;TAIR10_gene.sorted.bed&#39;,head=F)
+out=cbind(gene[,1:7],rep(NA,nrow(gene)),rep(NA,nrow(gene)))
+write.table(out,&#39;TAIR10_gene.sorted.forcomb.bed&#39;,sep=&#39;\t&#39;,row.names=F,col.names=F,quote=F)
+</code></pre></div>
+
+<div><pre><code class="language-bash">cat TAIR10_transposable_element.bed TAIR10_gene.sorted.forcomb.bed &gt; TAIR10_gene_te.bed
+sort-bed TAIR10_gene_te.bed &gt; TAIR10_gene_te.sorted.bed
+closest-features --no-overlaps --dist --delim &#39;\t&#39; TAIR10_gene.sorted.bed TAIR10_gene_te.sorted.bed &gt; test.output</code></pre></div>
+
+<p>We can now go look into this bedops output to see the results:</p>
+
+<div><pre><code class="language-r">data = read.delim(&#39;test.output&#39;,head=F,sep=&#39;\t&#39;)
+
+#genes with nothing upstream are writted out with NA 
+#however it does not match full formatting. 
+#Therefore, we can pull these columns seperatly.
+
+no.upstream=subset(data,is.na(data$V9)==T)
+both=subset(data,is.na(data$V9)==F)
+no.downstream=subset(both,is.na(both$V19)==T)
+both=subset(both,is.na(both$V19)==F)
+class=paste(both$V13,both$V23,sep=&#39;-&#39;)
+both=cbind(both,class)
+out=subset(both,both$class==&#39;transposable_element-transposable_element&#39;)
+oneside=subset(both,both$class==&#39;transposable_element-gene&#39; | both$class==&#39;gene-transposable_element&#39;)
+write.table(out,&#39;TAIR10_tete_gene.bed&#39;,sep=&#39;\t&#39;,row.names=F,quote=F,col.names=F)
+write.table(oneside,&#39;TAIR10_teoneside_gene.bed&#39;,sep=&#39;\t&#39;,row.names=F,quote=F,col.names=F)</code></pre></div>
+
+<p>Of the <strong>27,404</strong> genes with calls on both sides, just over half (56%) are flanked by other genes:
+<img src="./bioinformatics_notebook_images/p1.png" alt="barplot of gene neighbor classes"></p>
+
+<p>So I think that the file contains only protein coding genes. No TE genes, no pseudogenes, tRNAs, etc.</p>
+
+<p>From this, we see that although overal gene density decreases near the centromers (TE-rich regions), that is largely where we find genes with a TE flanking both sides:
+<img src="./bioinformatics_notebook_images/p2.png" alt="barplot of gene neighbor classes"></p>
+
+<p>A local view to highlight it:
+<img src="./bioinformatics_notebook_images/p3.png" alt="barplot of gene neighbor classes"></p>
+
+<p>The output file has been creaed as <code>TAIR10_tete_gene.bed</code> containing 3134 genes along with a file of genes with TEs flanking one side in <code>TAIR10_teoneside_gene.bed</code> containing 8762 genes.</p>
+
+<hr>
+
+<h1 id="toc_12">April 6th, 2016</h1>
+
+<hr>
+
+<p>Today I have attempted to align Joanne&#39;s bisulfite sequencing data of 3DPI Col-0 and <em>rdd</em> mutants for both mock and control samples. This data has been passed to myself and Peter Crisp, along with sRNA sequencing data (1/3/6 DPI) and mRNA-seq (3 DPI) data.</p>
+
+<p>The fastq files have been passed via my processing script as single-end sequencing reads:</p>
+
+<div><pre><code class="language-none">/home/steve/scripts/wgbs_pipelinev0.4.sh -se &lt;input fastq&gt; ../../../genomes/TAIR10/assembly/ &lt;outname&gt;</code></pre></div>
+
+
+
+<script type="text/javascript">
+var _self="undefined"!=typeof window?window:"undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?self:{},Prism=function(){var e=/\blang(?:uage)?-(\w+)\b/i,t=0,n=_self.Prism={util:{encode:function(e){return e instanceof a?new a(e.type,n.util.encode(e.content),e.alias):"Array"===n.util.type(e)?e.map(n.util.encode):e.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/\u00a0/g," ")},type:function(e){return Object.prototype.toString.call(e).match(/\[object (\w+)\]/)[1]},objId:function(e){return e.__id||Object.defineProperty(e,"__id",{value:++t}),e.__id},clone:function(e){var t=n.util.type(e);switch(t){case"Object":var a={};for(var r in e)e.hasOwnProperty(r)&&(a[r]=n.util.clone(e[r]));return a;case"Array":return e.map&&e.map(function(e){return n.util.clone(e)})}return e}},languages:{extend:function(e,t){var a=n.util.clone(n.languages[e]);for(var r in t)a[r]=t[r];return a},insertBefore:function(e,t,a,r){r=r||n.languages;var l=r[e];if(2==arguments.length){a=arguments[1];for(var i in a)a.hasOwnProperty(i)&&(l[i]=a[i]);return l}var o={};for(var s in l)if(l.hasOwnProperty(s)){if(s==t)for(var i in a)a.hasOwnProperty(i)&&(o[i]=a[i]);o[s]=l[s]}return n.languages.DFS(n.languages,function(t,n){n===r[e]&&t!=e&&(this[t]=o)}),r[e]=o},DFS:function(e,t,a,r){r=r||{};for(var l in e)e.hasOwnProperty(l)&&(t.call(e,l,e[l],a||l),"Object"!==n.util.type(e[l])||r[n.util.objId(e[l])]?"Array"!==n.util.type(e[l])||r[n.util.objId(e[l])]||(r[n.util.objId(e[l])]=!0,n.languages.DFS(e[l],t,l,r)):(r[n.util.objId(e[l])]=!0,n.languages.DFS(e[l],t,null,r)))}},plugins:{},highlightAll:function(e,t){var a={callback:t,selector:'code[class*="language-"], [class*="language-"] code, code[class*="lang-"], [class*="lang-"] code'};n.hooks.run("before-highlightall",a);for(var r,l=a.elements||document.querySelectorAll(a.selector),i=0;r=l[i++];)n.highlightElement(r,e===!0,a.callback)},highlightElement:function(t,a,r){for(var l,i,o=t;o&&!e.test(o.className);)o=o.parentNode;o&&(l=(o.className.match(e)||[,""])[1],i=n.languages[l]),t.className=t.className.replace(e,"").replace(/\s+/g," ")+" language-"+l,o=t.parentNode,/pre/i.test(o.nodeName)&&(o.className=o.className.replace(e,"").replace(/\s+/g," ")+" language-"+l);var s=t.textContent,u={element:t,language:l,grammar:i,code:s};if(!s||!i)return n.hooks.run("complete",u),void 0;if(n.hooks.run("before-highlight",u),a&&_self.Worker){var c=new Worker(n.filename);c.onmessage=function(e){u.highlightedCode=e.data,n.hooks.run("before-insert",u),u.element.innerHTML=u.highlightedCode,r&&r.call(u.element),n.hooks.run("after-highlight",u),n.hooks.run("complete",u)},c.postMessage(JSON.stringify({language:u.language,code:u.code,immediateClose:!0}))}else u.highlightedCode=n.highlight(u.code,u.grammar,u.language),n.hooks.run("before-insert",u),u.element.innerHTML=u.highlightedCode,r&&r.call(t),n.hooks.run("after-highlight",u),n.hooks.run("complete",u)},highlight:function(e,t,r){var l=n.tokenize(e,t);return a.stringify(n.util.encode(l),r)},tokenize:function(e,t){var a=n.Token,r=[e],l=t.rest;if(l){for(var i in l)t[i]=l[i];delete t.rest}e:for(var i in t)if(t.hasOwnProperty(i)&&t[i]){var o=t[i];o="Array"===n.util.type(o)?o:[o];for(var s=0;s<o.length;++s){var u=o[s],c=u.inside,g=!!u.lookbehind,h=!!u.greedy,f=0,d=u.alias;u=u.pattern||u;for(var p=0;p<r.length;p++){var m=r[p];if(r.length>e.length)break e;if(!(m instanceof a)){u.lastIndex=0;var y=u.exec(m),v=1;if(!y&&h&&p!=r.length-1){var b=r[p+1].matchedStr||r[p+1],k=m+b;if(p<r.length-2&&(k+=r[p+2].matchedStr||r[p+2]),u.lastIndex=0,y=u.exec(k),!y)continue;var w=y.index+(g?y[1].length:0);if(w>=m.length)continue;var _=y.index+y[0].length,P=m.length+b.length;if(v=3,P>=_){if(r[p+1].greedy)continue;v=2,k=k.slice(0,P)}m=k}if(y){g&&(f=y[1].length);var w=y.index+f,y=y[0].slice(f),_=w+y.length,S=m.slice(0,w),O=m.slice(_),j=[p,v];S&&j.push(S);var A=new a(i,c?n.tokenize(y,c):y,d,y,h);j.push(A),O&&j.push(O),Array.prototype.splice.apply(r,j)}}}}}return r},hooks:{all:{},add:function(e,t){var a=n.hooks.all;a[e]=a[e]||[],a[e].push(t)},run:function(e,t){var a=n.hooks.all[e];if(a&&a.length)for(var r,l=0;r=a[l++];)r(t)}}},a=n.Token=function(e,t,n,a,r){this.type=e,this.content=t,this.alias=n,this.matchedStr=a||null,this.greedy=!!r};if(a.stringify=function(e,t,r){if("string"==typeof e)return e;if("Array"===n.util.type(e))return e.map(function(n){return a.stringify(n,t,e)}).join("");var l={type:e.type,content:a.stringify(e.content,t,r),tag:"span",classes:["token",e.type],attributes:{},language:t,parent:r};if("comment"==l.type&&(l.attributes.spellcheck="true"),e.alias){var i="Array"===n.util.type(e.alias)?e.alias:[e.alias];Array.prototype.push.apply(l.classes,i)}n.hooks.run("wrap",l);var o="";for(var s in l.attributes)o+=(o?" ":"")+s+'="'+(l.attributes[s]||"")+'"';return"<"+l.tag+' class="'+l.classes.join(" ")+'" '+o+">"+l.content+"</"+l.tag+">"},!_self.document)return _self.addEventListener?(_self.addEventListener("message",function(e){var t=JSON.parse(e.data),a=t.language,r=t.code,l=t.immediateClose;_self.postMessage(n.highlight(r,n.languages[a],a)),l&&_self.close()},!1),_self.Prism):_self.Prism;var r=document.currentScript||[].slice.call(document.getElementsByTagName("script")).pop();return r&&(n.filename=r.src,document.addEventListener&&!r.hasAttribute("data-manual")&&document.addEventListener("DOMContentLoaded",n.highlightAll)),_self.Prism}();"undefined"!=typeof module&&module.exports&&(module.exports=Prism),"undefined"!=typeof global&&(global.Prism=Prism);
+</script>
+
+<script type="text/javascript">
+Prism.languages.r={comment:/#.*/,string:/(['"])(?:\\?.)*?\1/,"percent-operator":{pattern:/%[^%\s]*%/,alias:"operator"},"boolean":/\b(?:TRUE|FALSE)\b/,ellipsis:/\.\.(?:\.|\d+)/,number:[/\b(?:NaN|Inf)\b/,/\b(?:0x[\dA-Fa-f]+(?:\.\d*)?|\d*\.?\d+)(?:[EePp][+-]?\d+)?[iL]?\b/],keyword:/\b(?:if|else|repeat|while|function|for|in|next|break|NULL|NA|NA_integer_|NA_real_|NA_complex_|NA_character_)\b/,operator:/->?>?|<(?:=|<?-)?|[>=!]=?|::?|&&?|\|\|?|[+*\/^$@~]/,punctuation:/[(){}\[\],;]/};
+</script>
+
+<script type="text/javascript">
+!function(e){var t={variable:[{pattern:/\$?\(\([\w\W]+?\)\)/,inside:{variable:[{pattern:/(^\$\(\([\w\W]+)\)\)/,lookbehind:!0},/^\$\(\(/],number:/\b-?(?:0x[\dA-Fa-f]+|\d*\.?\d+(?:[Ee]-?\d+)?)\b/,operator:/--?|-=|\+\+?|\+=|!=?|~|\*\*?|\*=|\/=?|%=?|<<=?|>>=?|<=?|>=?|==?|&&?|&=|\^=?|\|\|?|\|=|\?|:/,punctuation:/\(\(?|\)\)?|,|;/}},{pattern:/\$\([^)]+\)|`[^`]+`/,inside:{variable:/^\$\(|^`|\)$|`$/}},/\$(?:[a-z0-9_#\?\*!@]+|\{[^}]+\})/i]};e.languages.bash={shebang:{pattern:/^#!\s*\/bin\/bash|^#!\s*\/bin\/sh/,alias:"important"},comment:{pattern:/(^|[^"{\\])#.*/,lookbehind:!0},string:[{pattern:/((?:^|[^<])<<\s*)(?:"|')?(\w+?)(?:"|')?\s*\r?\n(?:[\s\S])*?\r?\n\2/g,lookbehind:!0,inside:t},{pattern:/(["'])(?:\\\\|\\?[^\\])*?\1/g,inside:t}],variable:t.variable,"function":{pattern:/(^|\s|;|\||&)(?:alias|apropos|apt-get|aptitude|aspell|awk|basename|bash|bc|bg|builtin|bzip2|cal|cat|cd|cfdisk|chgrp|chmod|chown|chroot|chkconfig|cksum|clear|cmp|comm|command|cp|cron|crontab|csplit|cut|date|dc|dd|ddrescue|df|diff|diff3|dig|dir|dircolors|dirname|dirs|dmesg|du|egrep|eject|enable|env|ethtool|eval|exec|expand|expect|export|expr|fdformat|fdisk|fg|fgrep|file|find|fmt|fold|format|free|fsck|ftp|fuser|gawk|getopts|git|grep|groupadd|groupdel|groupmod|groups|gzip|hash|head|help|hg|history|hostname|htop|iconv|id|ifconfig|ifdown|ifup|import|install|jobs|join|kill|killall|less|link|ln|locate|logname|logout|look|lpc|lpr|lprint|lprintd|lprintq|lprm|ls|lsof|make|man|mkdir|mkfifo|mkisofs|mknod|more|most|mount|mtools|mtr|mv|mmv|nano|netstat|nice|nl|nohup|notify-send|nslookup|open|op|passwd|paste|pathchk|ping|pkill|popd|pr|printcap|printenv|printf|ps|pushd|pv|pwd|quota|quotacheck|quotactl|ram|rar|rcp|read|readarray|readonly|reboot|rename|renice|remsync|rev|rm|rmdir|rsync|screen|scp|sdiff|sed|seq|service|sftp|shift|shopt|shutdown|sleep|slocate|sort|source|split|ssh|stat|strace|su|sudo|sum|suspend|sync|tail|tar|tee|test|time|timeout|times|touch|top|traceroute|trap|tr|tsort|tty|type|ulimit|umask|umount|unalias|uname|unexpand|uniq|units|unrar|unshar|uptime|useradd|userdel|usermod|users|uuencode|uudecode|v|vdir|vi|vmstat|wait|watch|wc|wget|whereis|which|who|whoami|write|xargs|xdg-open|yes|zip)(?=$|\s|;|\||&)/,lookbehind:!0},keyword:{pattern:/(^|\s|;|\||&)(?:let|:|\.|if|then|else|elif|fi|for|break|continue|while|in|case|function|select|do|done|until|echo|exit|return|set|declare)(?=$|\s|;|\||&)/,lookbehind:!0},"boolean":{pattern:/(^|\s|;|\||&)(?:true|false)(?=$|\s|;|\||&)/,lookbehind:!0},operator:/&&?|\|\|?|==?|!=?|<<<?|>>|<=?|>=?|=~/,punctuation:/\$?\(\(?|\)\)?|\.\.|[{}[\];]/};var a=t.variable[1].inside;a["function"]=e.languages.bash["function"],a.keyword=e.languages.bash.keyword,a.boolean=e.languages.bash.boolean,a.operator=e.languages.bash.operator,a.punctuation=e.languages.bash.punctuation}(Prism);
+</script>
+
+<script type="text/javascript">
+!function(){if("undefined"!=typeof self&&self.Prism&&self.document){var e={html:"HTML",xml:"XML",svg:"SVG",mathml:"MathML",css:"CSS",clike:"C-like",javascript:"JavaScript",abap:"ABAP",actionscript:"ActionScript",apacheconf:"Apache Configuration",apl:"APL",applescript:"AppleScript",asciidoc:"AsciiDoc",aspnet:"ASP.NET (C#)",autoit:"AutoIt",autohotkey:"AutoHotkey",basic:"BASIC",csharp:"C#",cpp:"C++",coffeescript:"CoffeeScript","css-extras":"CSS Extras",fsharp:"F#",glsl:"GLSL",http:"HTTP",inform7:"Inform 7",json:"JSON",latex:"LaTeX",lolcode:"LOLCODE",matlab:"MATLAB",mel:"MEL",nasm:"NASM",nginx:"nginx",nsis:"NSIS",objectivec:"Objective-C",ocaml:"OCaml",parigp:"PARI/GP",php:"PHP","php-extras":"PHP Extras",powershell:"PowerShell",jsx:"React JSX",rest:"reST (reStructuredText)",sas:"SAS",sass:"Sass (Sass)",scss:"Sass (Scss)",sql:"SQL",typescript:"TypeScript",vhdl:"VHDL",vim:"vim",wiki:"Wiki markup",yaml:"YAML"};Prism.hooks.add("before-highlight",function(s){var a=s.element.parentNode;if(a&&/pre/i.test(a.nodeName)){var t,i,r=a.getAttribute("data-language")||e[s.language]||s.language.substring(0,1).toUpperCase()+s.language.substring(1),l=a.previousSibling;l&&/\s*\bprism-show-language\b\s*/.test(l.className)&&l.firstChild&&/\s*\bprism-show-language-label\b\s*/.test(l.firstChild.className)?i=l.firstChild:(t=document.createElement("div"),i=document.createElement("div"),i.className="prism-show-language-label",t.className="prism-show-language",t.appendChild(i),a.parentNode.insertBefore(t,a)),i.innerHTML=r}})}}();
+</script>
+
+<script type="text/x-mathjax-config">
+if (typeof MathJaxListener !== 'undefined') {
+  MathJax.Hub.Register.StartupHook('End', function () {
+    MathJaxListener.invokeCallbackForKey_('End');
+  });
+}
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+</body>
+
+</html>
