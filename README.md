@@ -1,3 +1,16 @@
+#Aug 4th, 2016
+---
+
+Attempting to run DSS on C24 and Ler CG methylation as I had to remap Ler yesterday.
+
+So you are required to use data smoothing when you do not have biological replicates in DSS. Therefore the output I created was:
+
+- CG DMRS
+- p threshold 0.01
+- data smoothed
+
+This results in 10224 CG DMRs between C24 and Ler. I have passed them to Ian in case he wants to compare with our tile approach.
+
 #Aug 3rd, 2016
 ---
 
@@ -29,13 +42,13 @@ So, we can make this data from our bismark cov files
 
 ```{bash}
 #from bismark alignments output folder...
-awk '{print $1" "$2" "$5+$6" "$5}' C24_CHH.bed.bismark.cov > C24_CHH.dss.txt
-awk '{print $1" "$2" "$5+$6" "$5}' C24_CHG.bed.bismark.cov > C24_CHG.dss.txt
-awk '{print $1" "$2" "$5+$6" "$5}' C24_CpG.bed.bismark.cov > C24_CG.dss.txt
+awk '{print $1"\t"$2"\t"$5+$6"\t"$5}' C24_CHH.bed.bismark.cov > C24_CHH.dss.txt
+awk '{print $1"\t"$2"\t"$5+$6"\t"$5}' C24_CHG.bed.bismark.cov > C24_CHG.dss.txt
+awk '{print $1"\t"$2"\t"$5+$6"\t"$5}' C24_CpG.bed.bismark.cov > C24_CG.dss.txt
 
-awk '{print $1" "$2" "$5+$6" "$5}' Ler_CHH.bed.bismark.cov > Ler_CHH.dss.txt
-awk '{print $1" "$2" "$5+$6" "$5}' Ler_CHG.bed.bismark.cov > Ler_CHG.dss.txt
-awk '{print $1" "$2" "$5+$6" "$5}' Ler_CpG.bed.bismark.cov > Ler_CG.dss.txt
+awk '{print $1"\t"$2"\t"$5+$6"\t"$5}' Ler_CHH.bed.bismark.cov > Ler_CHH.dss.txt
+awk '{print $1"\t"$2"\t"$5+$6"\t"$5}' Ler_CHG.bed.bismark.cov > Ler_CHG.dss.txt
+awk '{print $1"\t"$2"\t"$5+$6"\t"$5}' Ler_CpG.bed.bismark.cov > Ler_CG.dss.txt
 ```
 
 Throw on 'chr', 'pos', 'N', and 'X' as column names using nano.
@@ -61,7 +74,7 @@ head(dmrs)
 head(dmrs.smoothed)
 
 #showOneDMR(dmrs[1,],BSobj)
-
+write.table(dmrs.smoothed,'C24vsLer_CGDMRS.dss.txt',sep='\t',row.names=F)
 
 ```
 
