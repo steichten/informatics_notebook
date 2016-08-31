@@ -1,3 +1,136 @@
+
+#Aug 31st, 2016
+---
+###Working on MinION data analysis
+
+
+#August 30th, 2016
+---
+###Performed Lamda control DNA MinION sequencing using the Rapid sequencing kit (SQK-RAD001)
+###TAKEHOMES:
+```
+- Take photographs of all flowcells before and after sequencing for recording purposes
+- The flowcells themselves are bubble traps!
+- Try to prevent ever removing liquid from the sensor array on flowcell
+- Sequencing did appear to work. Will work on analysis later.
+```
+<img src=./bioinformatics_notebook_images/20160830_080324.jpg height=410x>
+
+Started earling in the morning to perform the lamda sequencing run in which all MinION customers are to do for general QC and working with the wet lab component for sequencing.
+
+The protocol itself for creating the library is dead simple. Following the CompanION for 'Rapid Lamda control experiment' had no issues. Only really need a thermocycler for a 1min 30C and a 1min 75C temp.
+
+Flowcell FAD23939 had air bubbles across sensor pore array (the part that matters). Attempted to remove by pipetting out small volume of buffer from sample port to no avail. QC run indicated basically no useable pores (!). Ben Schwessinger was present to observe and tried pulling buffer completely off array and re-adding. This did remove the observable bubbles. QC after this still indicated zero active pores. Compare these results from today against initla QC check when flowcell was received:
+
+###FAD23939 QC pore counts to date:
+| Pore group | Pore count - Aug 11th | Pore count - Aug 30 (bubbles) | Pore count - Aug 30 (buffer movement, no bubbles) |
+|------------|------------|---|---|
+| 1          |         361|4 | 0|
+| 2          |         317|1 | 0|
+| 3          |         210|0 | 0|
+| 4          |          74|0 | 0|
+| Total      |         962|5 | 0|
+
+So something went seriously wrong with chip after storing it in our fridge (at the desired 2-8C temp). I do not remember there being any bubbles present when package was opened, so perhase they developed over time in fridge?
+
+Here is a picture of the flowcell after Ben re-applied the buffer across the sensor array. Note that there still appears to be a bubble-ish points near the ends of the sensor array:
+
+<img src=./bioinformatics_notebook_images/20160830_134749.jpg width=800x>
+
+Given this mess, I used the other flowcell that was provided (FAD24036) for the lamda control experiment. This flowcell was QC'd for pore counts twice. Once specifically, and a second time during the sequencing run protocol (so pore counts are always determined right before seuqencing). The results are as follows:
+
+###FAD24036 QC pore counts to date:
+| Pore group | Pore count - Aug 11th | Pore count - Aug 30 QC | Pore count - Aug 30 in sequencing |
+|------------|------------|---|---|
+| 1          |         506|505|498|
+| 2          |         448|448|439|
+| 3          |         308|313|275|
+| 4          |          104|111|77|
+| Total      |      1366|1377|1289|
+
+So the pore counts appeared just fine and fairly consistant going into the sequencing itself. No bubbles were visable prior to sequencing.
+
+I seledted to have MinKNOW perform local basecalling rather than using Metrichor to call bases in the cloud. Therefore, sequencing commenced using the MinKNOW protocol ```NC_6Hr_Lambda_Burn_In_Run_FLO_MIN104_plus_1D_Basecalling.py```. Everything appeared to work properly, however the tab for local basecalling metrics (quality and read length) never filled in. The overall read size histogram did though. 
+
+<img src=./bioinformatics_notebook_images/lamda_seq_stats.png height=650x>
+
+Will check with Nanopore if there is some issue with MinKNOW currently.
+
+This ran for 6 hours. At the end of 6 hours the program did appear to complete on its own and return me to the MinION status page. However the computer was still quite busy using its processors for something with MinKNOW.
+
+The flowcell was then washed using the flowcell wash kit. After the 6 hour run, there were multiple bubbles now present on the flowcell:
+<img src=./bioinformatics_notebook_images/20160830_132454.jpg width=800>
+
+These bubbles remained after washing and returning to fridge:
+<img src=./bioinformatics_notebook_images/20160830_133349.jpg width=800x>
+
+
+
+#Aug 9th, 2016
+---
+
+Getting B stacei annotation files created for Beth
+
+```{r}
+getAttributeField <- function (x, field, attrsep = ";") {
+     s = strsplit(x, split = attrsep, fixed = TRUE)
+     sapply(s, function(atts) {
+         a = strsplit(atts, split = "=", fixed = TRUE)
+         m = match(field, sapply(a, "[", 1))
+         if (!is.na(m)) {
+             rv = a[[m]][2]
+         }
+         else {
+             rv = as.character(NA)
+         }
+         return(rv)
+     })
+}
+##########
+gffRead <- function(gffFile, nrows = -1) {
+     cat("Reading ", gffFile, ": ", sep="")
+     gff = read.table(gffFile, sep="\t", as.is=TRUE, quote="",
+     header=FALSE, comment.char="#", nrows = nrows,
+     colClasses=c("character", "character", "character", "integer",  
+"integer",
+     "character", "character", "character", "character"))
+     colnames(gff) = c("seqname", "source", "feature", "start", "end",
+             "score", "strand", "frame", "attributes")
+     cat("found", nrow(gff), "rows with classes:",
+         paste(sapply(gff, class), collapse=", "), "\n")
+     stopifnot(!any(is.na(gff$start)), !any(is.na(gff$end)))
+     return(gff)
+}
+```
+
+```{r}
+data=gffRead('Bstacei_316_v1.1.gene.gff3.gz')
+geneID=getAttributeField(data$attributes, "Name")
+data2=cbind(data,geneID)
+data2.gene=subset(data2,data$feature=='gene')
+out=data2.gene[,c(1,4,5,10,6,7)]
+
+write.table(out,'Bsta.gene.bed',sep='\t',row.names=F,quote=F,col.names=F)
+```
+
+#Aug 8th, 2016
+---
+
+MinION arrived
+
+attempting configuration test cell
+
+- 19089 MinION Identifcaion
+- flowcell 285382121
+- sample sre_ctc1
+- NC\_CTC_Run
+
+This is the configuration test cell that was present in the MinION upon arrival. Was run through the MinKNOW software. I need to determine if all was successful (I think it was)
+
+Also going through the test data upload of Metrichor to confirm that bass calling will work well.
+
+
+
 #Aug 4th, 2016
 ---
 
@@ -445,4 +578,5 @@ The fastq files have been passed via my processing script as single-end sequenci
 ```
 /home/steve/scripts/wgbs_pipelinev0.4.sh -se <input fastq> ../../../genomes/TAIR10/assembly/ <outname>
 ```
+
 
