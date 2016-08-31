@@ -2,7 +2,128 @@
 #Aug 31st, 2016
 ---
 ###Working on MinION data analysis
+###TAKEHOMES:
+```
+- These are still early days
+- Best practices have changed before I finished this sentence.
+```
 
+With lamnda control DNA sequencing completed, I can begin to figure out what to do with this new long read data. Sequencing needs to be viewed from a series of steps:
+
+1. **Raw data from the sequencer** which is signal traces from the MinION as a molecule moves through a pore. This is the equivilant stage as initial image data from an Illumina platform.
+2. **Calling bases in reads** to go from the raw data into an A,T,C,or G. At the moment there are a handful of ways to perform this with MinION data (discussed below). The current options for this are (MinKNOW 1.0.2, nanonet, and [nanocall](http://biorxiv.org/content/early/2016/03/28/046086)
+3. **Filtering reads for downstream analysis** in which a quality metric is used to cull poor quality reads
+4. **Downstream analysis** in which we now use these reads for something biologically interesting
+
+These steps are fairly well defined when using short read data (i.e. Illumina), however I have realized that this is still the wild west when it comes to Nanopore sequencing.
+
+Data is stored in a fast5 format which is basically an hdf5 formatted datafile [https://www.hdfgroup.org/HDF5/](https://www.hdfgroup.org/HDF5/) with the following structure:
+
+MinKNOW (as of v1.0.2) can perform basecalling on your local machine for 1D chemistry (i.e. the Rapid sequencing kit I have). This develops fast5 files as such:
+
+```
+/{attributes: file_version}
+|-UniqueGlobalKey/
+|      |-tracking_id/{attributes: asic_id_17, asic_id, asic_id_eeprom, asic_temp,
+ device_id, exp_script_hash, exp_script_name, exp_script_purpose, exp_start_time,
+ flow_cell_id, heatsink_temp, hostname, protocol_run_id, protocols_version_name,
+ run_id, version, version_name}
+|      |-channel_id/{attributes: channel_number, digitisation, offset, range,
+ sampling_rate}
+|      |-context_tags/{attributes: set when the experiment is configured}
+|-Raw/
+|      |-Reads/
+|             |-Read_42/{attributes: start_time, duration, read_number, start_mux,
+ read_id}
+|                    |-Signal{samples}
+|-Analyses/
+|      |-Basecall_1D_000/{attributes: name, version, time_stamp}
+|      |      |-BaseCalled_template/
+|      |      |      |-Fastq{text}
+|      |      |-Summary/
+|      |      |      |-basecall_1d_template/{attributes: num_events, called_events,
+ sequence_length, start_time, duration, mean_qscore, strand_score}
+|
+```
+Although this file format is likely useful, it requires some specific software to fully parse. [Poretools](https://github.com/arq5x/poretools) seems like the best set of scripts to currently look at these fast5 files. I ran the sequencing with the recent local 1D basecalling which means that my fast5 files should contain basecalls. Nanopore notes that these basecalls may be ever so slightly different than those from the EPI2ME pipelines as they use some different metrics, however I have yet to dive deep into that. Looking at my MinKNOW fast5 output folder:
+
+```
+cd /Library/MinKNOW/data/
+poretools stats reads
+
+total reads	27066
+total base pairs	143119010
+mean	5287.78
+median	3466
+min	93
+max	109367
+N25	14725
+N50	8768
+N75	4773
+```
+
+I can tell that sequences are certainly present within the files that were created. About 27000 reads creating 143Mb sequence
+
+However, I'm having issues getting the other, more useful parts of poretools working as it keeps throwing errors:
+
+```
+poretools readstats reads | head
+
+Traceback (most recent call last):
+  File "/usr/local/bin/poretools", line 9, in <module>
+    load_entry_point('poretools==0.5.1', 'console_scripts', 'poretools')()
+start_time	channel_number	read_number	template_events	complement_events
+  File "/usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/poretools-0.5.1-py2.7.egg/poretools/poretools_main.py", line 531, in main
+    args.func(parser, args)
+  File "/usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/poretools-0.5.1-py2.7.egg/poretools/poretools_main.py", line 55, in run_subtool
+    submodule.run(parser, args)
+  File "/usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/poretools-0.5.1-py2.7.egg/poretools/readstats.py", line 9, in run
+    start_time = fast5.get_start_time()
+  File "/usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/poretools-0.5.1-py2.7.egg/poretools/Fast5File.py", line 476, in get_start_time
+    node = self.find_event_timing_block()
+  File "/usr/local/Cellar/python/2.7.9/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/poretools-0.5.1-py2.7.egg/poretools/Fast5File.py", line 446, in find_event_timing_block
+    path = fastq_paths[self.version]['template'] % (self.group)
+KeyError: 'template'
+```
+
+Still trying to figure that one out...
+
+With b
+As a comparison, I took the fast5 files created by MinKNOW and extracted fastq reads and mapped them to a lamda genome I grabbed from NCBI which I'm taking to be 'close enough' to the proper genome.
+
+[http://www.ncbi.nlm.nih.gov/nuccore/9626243?report=fasta](http://www.ncbi.nlm.nih.gov/nuccore/9626243?report=fasta)
+
+This was then mapped using bwa:
+
+```
+poretools fastq /Library/MinKNOW/data/reads/*.fast5 > test_lamda_allreads.fastq
+
+bwa index test_lamda.fasta
+bwa mem test_lamda.fasta test_lamda_allreads.fastq > test_lamda.sam
+samtools view -Sb test_lamda.sam > test_lamda.bam
+samtools sort -T temp.sorted -o test_lamda.sorted.bam test_lamda.bam
+samtools index test_lamda.sorted.bam
+
+samtools flagstat test_lamda.sorted.bam
+
+48631 + 0 in total (QC-passed reads + QC-failed reads)
+0 + 0 secondary
+21565 + 0 supplimentary
+0 + 0 duplicates
+41378 + 0 mapped (85.09%:nan%)
+0 + 0 paired in sequencing
+0 + 0 read1
+0 + 0 read2
+0 + 0 properly paired (nan%:nan%)
+0 + 0 with itself and mate mapped
+0 + 0 singletons (nan%:nan%)
+0 + 0 with mate mapped to a different chr
+0 + 0 with mate mapped to a different chr (mapQ>=5)
+```
+
+Other software that may be useful:
+NanoOK [https://documentation.tgac.ac.uk/display/NANOOK/NanoOK](https://documentation.tgac.ac.uk/display/NANOOK/NanoOK)
+poRe [https://github.com/mw55309/poRe_docs](https://github.com/mw55309/poRe_docs)
 
 #August 30th, 2016
 ---
@@ -29,7 +150,7 @@ Flowcell FAD23939 had air bubbles across sensor pore array (the part that matter
 | 2          |         317|1 | 0|
 | 3          |         210|0 | 0|
 | 4          |          74|0 | 0|
-| Total      |         962|5 | 0|
+| **Total**      |         962|5 | 0|
 
 So something went seriously wrong with chip after storing it in our fridge (at the desired 2-8C temp). I do not remember there being any bubbles present when package was opened, so perhase they developed over time in fridge?
 
@@ -46,7 +167,7 @@ Given this mess, I used the other flowcell that was provided (FAD24036) for the 
 | 2          |         448|448|439|
 | 3          |         308|313|275|
 | 4          |          104|111|77|
-| Total      |      1366|1377|1289|
+| **Total**      |      1366|1377|1289|
 
 So the pore counts appeared just fine and fairly consistant going into the sequencing itself. No bubbles were visable prior to sequencing.
 
