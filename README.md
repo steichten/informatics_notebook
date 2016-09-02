@@ -1,4 +1,30 @@
 
+#Sept 2nd, 2016
+---
+
+###More MinION analyses
+###TAKEHOMES:
+```
+-
+-
+```
+
+Two days ago, I started to upload the 1D basecalled fast5 files into Metrichor for their Lamda alignment pipeline. I first found that if I started the Metrichor app with the entire directory of files, it seemed to stall out instantly. I seem to have gotten around that by first starting it with just a handfull of fast5 files, then adding the rest into the directory.
+
+These Metrichor pipelines are made to stream data to the cloud, do something, then return data files to you (basically appended fast5 files with more bits inside them).
+
+So far, it seems to move files up there extremely slowly (I'm 2 days into this pipeline and still uploading files!) Hopefully this can be sped up...
+
+The Metrichor alignment is based on the [lastal alignment software](http://last.cbrc.jp/)
+
+The pipeline is working. I'm seeing about 80% alignment accuracy. ~1000x + coverage of the lamda genome:
+
+<img src=./bioinformatics_notebook_images/metrichor_test.png width=800x>
+
+The MinION creates fast5 files during the initial mux work when the sequencing protocol is starting. There are 92 mux fast5 files created. After sequencing, there were 38,398 lamda fast5 files for a total of 38,490 that are being processed by Metrichor.
+
+###Final results of Metrichor alignment
+
 #Aug 31st, 2016
 ---
 ###Working on MinION data analysis
@@ -45,7 +71,45 @@ MinKNOW (as of v1.0.2) can perform basecalling on your local machine for 1D chem
  sequence_length, start_time, duration, mean_qscore, strand_score}
 |
 ```
-Although this file format is likely useful, it requires some specific software to fully parse. [Poretools](https://github.com/arq5x/poretools) seems like the best set of scripts to currently look at these fast5 files. I ran the sequencing with the recent local 1D basecalling which means that my fast5 files should contain basecalls. Nanopore notes that these basecalls may be ever so slightly different than those from the EPI2ME pipelines as they use some different metrics, however I have yet to dive deep into that. Looking at my MinKNOW fast5 output folder:
+Although this file format is likely useful, it requires some specific software to fully parse. 
+
+As an HDF5 file format, we can parse it in R using some bioconductor libraries such as [rhdf5](http://bioconductor.org/packages/release/bioc/html/rhdf5.html)
+
+Here is an example in which we can dive into this structure and read actual data (raw signals, fasta, fastq, alignments, etc) as well as attribute data (i.e. metadata about the file):
+
+```{r}
+library(rhdf5)
+pass=H5Fopen('rsb0001259_local_20160830_FNFAD24036_MN19089_mux_scan_lamda_ctr_exp_72436_ch242_read568_strand.fast5')
+
+head(pass$Raw$Reads$Read_568$Signal)
+[1]  277  802 1227 1221 1215 1208
+
+h5readAttributes(pass,'/Raw/Reads/Read_568')
+
+$duration
+[1] 37505
+
+$median_before
+[1] 45.77394
+
+$read_id
+[1] "0da6697a-bd53-496a-a990-4d3423d4940e"
+
+$read_number
+[1] 568
+
+$start_mux
+[1] 4
+
+$start_time
+[1] 1323069
+
+#5hls(pass) would act similar to str() to show you what the structure looks like
+```
+
+Can also use [HDFView from the HDF group](https://www.hdfgroup.org/products/java/release/download.html) to look into these fast5 files.
+
+[Poretools](https://github.com/arq5x/poretools) seems like the best set of scripts to currently look at these fast5 files. I ran the sequencing with the recent local 1D basecalling which means that my fast5 files should contain basecalls. Nanopore notes that these basecalls may be ever so slightly different than those from the EPI2ME pipelines as they use some different metrics, however I have yet to dive deep into that. Looking at my MinKNOW fast5 output folder:
 
 ```
 cd /Library/MinKNOW/data/
