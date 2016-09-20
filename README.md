@@ -1,4 +1,77 @@
 
+#Sept 20th, 2016
+---
+
+###Brachypodium genome version nightmares
+
+###TAKEHOMES:
+```
+- Community is fragmented!
+- Paper worked with v1.2 of Bdistachyon reference
+- Phytozome V9
+- TE annotations v2.2 from http://pgsb.helmholtz-muenchen.de/plant/brachypodium/download/index.jsp
+- Gordon et al developed SNP-corrected genomes in v1.2, however somewhere along the line they have been making VCF files for updated versions (v2.1)
+- HARD TO FIND MANY OF THESE FILES ON NET!
+```
+
+I am trying to confirm the versions of the genome and annotations used in my recent Genome Research paper. This is done in part to make sure there was no cross-contamination of file versions anywhere when it comes to providing reproducable data for the analyses in the paper.
+
+###Genomes
+
+There are 4-5 full versions of the _Brachypodium distachyon_ genome to date as far as I can tell:
+
+**v1.0 - the initial publication data**
+
+The IBI data
+
+**v1.2 - Phytozome V9 release**
+
+This did NOT change the actual genome sequence from v1.0. Only the annotations
+This is referenced as ```Bdistachyon_192_...``` when it comes to public files. This version can also be identified by having five pseudomolecules (Bd1 through Bd5) along with 78 ```scaffold_XXX``` fragments within the fasta files
+
+**v2.1 - Phytozome V10 release**
+
+This is a true new assembly and new annotations. Referenced as ```Bdistachyon_283_...``` in public Phytozome files. This has the 5 main pseudomolecules with only 22 ```super_XXX``` scaffold fragments.
+
+**v3.0 - Phytozome V11 ??**
+
+Another new version, not sure what it is used for. Files ID's as ```Bdistachyon_307_...```
+
+**v3.1 - Phytozome V11 release**
+
+This is the current release containing ```Bdistachyon_314_...``` files.
+
+The Genome Research paper uses SNP-corrected fasta files that were once public on brachypodium.org. I found them on Todd Mockler's FTP site today as well. These reference the 78 ```scaffold_``` fragments in the genome sequence so I believe these to be SNP corrected versions of the v1.2 genome release.
+
+###Annotations used in the MS
+
+**SNP data from Gordon et al**
+
+With this knowledge in hand, it certainly seems that the resequencing of the 7 diverse inbred lines occurded with v1.2 genomes. There is a vcf file provided in Phytozome V9 under 'diversity' that has SNP calls for the seven lines as ```Bdistachyon_192-GATK_filtered.vcf.gz```. I have yet to confirm exactly how filtered this file is compared to the results in Gordon et al.
+
+However, Gordon and co appear to have also been updating their SNP calls in VCF files provided to v2.1 of the genome as ```Bdistachyon_283.vcf```. There is not a file for v3.0 or v3.1.
+
+**gene annotations**
+
+I used the v1.2 gene annotations from ```Bdistachyon_192_gene.gff3```
+
+**Transposable elements**
+
+This is a bit more confusing. The v1.0 genome manuscript highlights some results from different TE superfamilies, however there does not appear to be a public file of all annotated TEs in this release.
+
+The files that I used came from PGSB [Brachypodium distachyon project](http://pgsb.helmholtz-muenchen.de/plant/brachypodium/download/index.jsp)
+
+They noted that their annotations are to the v1.0 (v1.2) assembly. Their TE annotations are named as ```MIPS_Bd_Transposons_v2.2_16-07-2009.gff3```
+
+What this means moving forward is that if I want to leapfrog up to v3.1 of the genome, I may need to make my own repeat annotations (!) or see if the PGSB people are planning to rework it for the newer version.
+
+**locaTE analysis from TIM**
+
+Tim used the TE annotation and SNP-corrected genomes I provided back at the time, so all the locaTE calls should be also based off the v1.2 genome assembly and annotations.
+
+This also notes that the Genome Research paper was completed with v1.2 data and annotations.
+
+---
 #Sept 2nd, 2016
 ---
 
@@ -23,7 +96,21 @@ The pipeline is working. I'm seeing about 80% alignment accuracy. ~1000x + cover
 
 The MinION creates fast5 files during the initial mux work when the sequencing protocol is starting. There are 92 mux fast5 files created. After sequencing, there were 38,398 lamda fast5 files for a total of 38,490 that are being processed by Metrichor.
 
+All files are uploaded (2pm), however I don't have a clue if the actual steps in the cloud are all done or not. Perhaps so? I've download all reads that I sent up, so perhaps it is done?
+
+
 ###Final results of Metrichor alignment
+
+I'm having trouble trying to track down where all the reads go. I have downloaded the same number as I uploaded:
+
+| type | pass | fail | total |
+|------|------|------|-------|
+| mux | 22 | 70 | 92 |
+| lamda | 26685 | 11712 | 38397 |
+| | | **Total** | 38489 |
+
+I want a flowchart of where these numbers end up, as there are different numbers in the Metichor report at the moment that don't add up.
+
 
 #Aug 31st, 2016
 ---
@@ -188,7 +275,7 @@ samtools flagstat test_lamda.sorted.bam
 Other software that may be useful:
 NanoOK [https://documentation.tgac.ac.uk/display/NANOOK/NanoOK](https://documentation.tgac.ac.uk/display/NANOOK/NanoOK)
 poRe [https://github.com/mw55309/poRe_docs](https://github.com/mw55309/poRe_docs)
-
+---
 #August 30th, 2016
 ---
 ###Performed Lamda control DNA MinION sequencing using the Rapid sequencing kit (SQK-RAD001)
