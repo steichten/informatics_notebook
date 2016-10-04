@@ -1,4 +1,19 @@
 
+#Oct 4th, 2016
+---
+
+Another MinION run
+
+My replacement flowcell is a SpotON model (MIN105). This has a slightly different protocol for priming and loading a flowcell.
+
+I also leared that any air bubble = instant dead pores. The last priming step is adding 200ul to the sample port when the spot on port is already open. I saw what appeared to be an air gap in the sample port area, and attempted the standard 'pull a bit off'. However, with the SpotOn port open, it lead to negative pressure over the array and a brief (less then 1 second) air pull into the spoton port and over the array. Althoug extremely brief, it appears to have killed ~200 pores from my previous QC and is clearly visable on the running screen (right side, big blue). This area of dead pores is right under the spoton opening.:
+
+<img src=./bioinformatics_notebook_images/minion_spoton.png width=800x>
+
+**Lesson learned, never provide negative pressure on flowcell when spoton port is open.**
+
+This is also a test of some old Bd21 Brachypodium distachyon gDNA that was prepped in our lab over a year ago using Qiagen kits. This is our standard method of extracting gDNA in the lab, and it will be interesting to see how it sequences compared to CTAB preps such as what Ben performs.
+
 #Sept 20th, 2016
 ---
 
