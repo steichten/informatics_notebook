@@ -1,4 +1,39 @@
 
+#Oct 19th, 2016
+---
+
+With some of the final logistics of ordering for BVZ0049 complete, I can begin to plan the subsequent labwork and analyses.
+
+To recap, there were seven plates of gDNA that were isolated from the chambers of BVZ0049: 6 full (96 samples) and 1 partial (28 on plate 7).
+
+I have performed methylc-seq on plate 5 as 'l5t' which was the initial __L__ibrary plate __5__ __t__est. This sequencing from a HiSeq 2500 flowcell is in my hands (SN877_0399) and appears to be of fair quality (got 82 of 96 samples with data).
+
+I have also pulled samples from across multiple plates to form 'SP1' which is __S__ample __P__late __1__. This is a specific set of lines from clonal clades 1 and 6 from the spring conditions (along with 8 Bd21 controls). These have been skim sequenced (SN877_0432) across a HiSeq 2500 flowcell.
+
+The SP1 library pool was adjusted after this test run to try and equalize the proportions of each samples within the library a bit better. The initial read counts from SN877_0432 are here:
+
+<img src=./bioinformatics_notebook_images/sp1_readcount.png width=800x>
+
+Alhtough this was supposed to be an equal molar pool, there is clearly some variation. Now, I know it will never be perfect as I am trying to pool such a large number of samples. However I hope to pull up some of the lower samples specifically. One interesting result is that there was some general overestimation of the nanomolarity from the GXII quantification for the last two plates. This seems tied to the result that many of the lowest readcount samples actually had some of the higher nM values:
+
+<img src=./bioinformatics_notebook_images/sp1_gxtoreadcount.png width=800x>
+_In a perfect world this would be a flat horizontal line in which the initial nM calculation was not related to final readcound at all_
+
+A major limitation of my third-reaction protocol is that I do not have much library to work with in the end. Because of this, I cannot truly re-pool these libraries. Instead, I have added a 'spike in' value that should hopefully bolster some of the poorest performing libraries. This was done by myself and I sent off this new **SP-1bs-P2spri** pool to the BRF yesterday. It will be run across an entire flowcell in Highoutput HiSeq 2000 mode. This is an expensive run, but will hopefully provide some depth to these specific samples moving forward.
+
+Outside of this SP1 set, I have also gone through and performed bisulfite conversion on _almost_ all of the gDNA samples. I have 6 plates that are awaiting library creation, pooling, and skim sequencing on the 2500:
+
+- Plate L1
+- Plate L2
+- Plate L3
+- Plate L6
+- Plate L7
+
+I have omitted Plate L4 at the moment as it has ened up as a partial plate. It will be finalized after the others have been sequenced to hold as many redo samples as possible (as certainly some will fail).
+
+I still have high hopes that the vast majority of samples will be sequenced with good data. I know that some may not make it which will be annoying for replication work. However, trying to cordinate over 600 samples is pain enough already. I will try to pickup as many failed samples as possible, although I won't try for too long.
+
+##C
 #Oct 4th, 2016
 ---
 
