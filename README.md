@@ -1,3 +1,225 @@
+#Dec 2nd, 2016
+---
+
+Still trying to learn about using python, pip install, and modules on raijin
+
+TEPID wants Python 2.7. I can load that via a module 
+
+`module load python/2.7.11`
+
+This loading of python also provides me with `pip` so I can perform the module installation that is required:
+
+```
+cd $HOME/bin/TEPID
+pip install -r requirements.txt --user
+```
+As I must install all things locally. The `--user` flag will put all the python modules into my ```.local``` directory
+
+I can then officially install TEPID:
+
+```
+python setup.py install --user
+python setup.py test
+```
+
+I can also now install all of the other required software as needed:
+
+```
+module load bowtie2/2.2.5
+module load samtools/1.2
+cd $HOME
+cd bin
+
+#samblaster v0.1.19
+wget https://github.com/GregoryFaust/samblaster/releases/download/v.0.1.19/samblaster-v.0.1.19.tar.gz
+tar -zxvf samblaster-v.0.1.19.tar.gz
+cd samblaster-v.0.1.19
+make
+printf "export PATH=\$PATH:/home/801/sre801/bin/samblaster-v.0.1.19/\n" >> $HOME/.bashrc
+cd ../
+
+#bedtools
+wget https://github.com/arq5x/bedtools2/releases/download/v2.26.0/bedtools-2.26.0.tar.gz
+tar -zxvf bedtools-2.26.0.tar.gz
+cd bedtools2
+make
+printf "export PATH=\$PATH:/home/801/sre801/bin/bedtools2/bin\n" >> $HOME/.bashrc
+cd ../
+
+#yaha
+wget https://github.com/GregoryFaust/yaha/releases/download/v0.1.83/yaha-0.1.83.tar.gz
+tar -zxvf yaha-0.1.83.tar.gz
+cd yaha-0.1.83
+make
+printf "export PATH=\$PATH:/home/801/sre801/bin/yaha-0.1.83/bin\n" >> $HOME/.bashrc
+cd ../
+```
+
+From this, when I make the submission scripts to run TEPID, I need to include the following lines to load the required modules:
+
+```
+module load python/2.7.11
+module load bowtie2/2.2.5
+module load samtools/1.2
+```
+All other requirements are found in my `$PATH` and should be good to go.
+
+Iniital test seemed to work, moving over all files and going for broke later today.
+
+Might need to have every sample in own folder for `tepid-discover` as temp files are non-unique names...
+
+did that with this:
+
+```
+READ1FILE=($(ls *R1_001.fastq.gz))
+
+for FILE in "${READ1FILE[@]}"
+do
+	SAMPLENAME=(${FILE//-WGS/ })
+	echo ${SAMPLENAME[0]}	
+	
+	mkdir $SAMPLENAME
+	mv ${SAMPLENAME}* $SAMPLENAME
+	mv deletion_reads_${SAMPLENAME}* $SAMPLENAME
+	mv deletions_${SAMPLENAME}* $SAMPLENAME
+	mv insertion_reads_${SAMPLENAME}* $SAMPLENAME
+	mv insertions_${SAMPLENAME}* $SAMPLENAME
+	mv tepid_discover_log_${SAMPLENAME}* $SAMPLENAME
+done
+
+```
+
+can run to create poly_te file for step 3:
+
+```
+python $HOME/bin/TEPID/Scripts/merge_insertions.py -f insertions
+python $HOME/bin/TEPID/Scripts/merge_deletions.py -f deletions
+```
+
+Now to sort out the refinement step (Step 3)...
+
+```
+for FILE in $(ls -d */)
+do
+    ID=${FILE::-1}
+    cd $ID
+    tepid-refine -i ../insertions.bed -d ../deletions.bed -p 12 -t /home/steve/bin/TEPID/Annotation/Brachypodium/Brachy_TE_v2.2.bed.gz -n $ID -c ${ID}.bam -s ${ID}.split.bam -a ../ALL_SAMPLES.txt
+    cd ../
+done
+```
+Refinement done, can now merge outputs once again (had to ask Tim on how to do this one...
+
+```
+for FILE in $(ls -d */)
+do
+    ID=${FILE::-1}
+    cd $ID
+    cat second_pass_insertion_${ID}.bed insertions_${ID}.bed > refined_ins_${ID}.bed
+    cat second_pass_deletion_${ID}.bed deletions_${ID}.bed > refined_del_${ID}.bed
+    cd ../
+done
+
+python /home/steve/bin/TEPID/Scripts/merge_insertions.py -f refined_ins
+python /home/steve/bin/TEPID/Scripts/merge_deletions.py -f refined_del
+
+python /home/steve/bin/TEPID/Scripts/merge_insertions.py -f ambiguous_insertion
+python /home/steve/bin/TEPID/Scripts/merge_deletions.py -f ambiguous_deletion
+
+python /home/steve/bin/TEPID/Scripts/genotype.py -i -a ambiguous_insertion.bed -m refined_ins.bed -s ALL_SAMPLES.txt -r Bd21-t1 > insertions_refined_genotyped.bed
+python /home/steve/bin/TEPID/Scripts/genotype.py -i -a ambiguous_deletion.bed -m refined_del.bed -s ALL_SAMPLES.txt -r Bd21-t1 > deletions_refined_genotyped.bed
+```
+
+
+
+#Dec 1st, 2016
+---
+
+###Looking to get TEPID up and running on Raijin for some batch processing
+Setup notes:
+
+grabbed samtools v1.2, samblaster v0.1.19, yaha.
+
+bedtools, bowtie2, and python already installed
+
+making submission scripts to create bowtie2 and yaha index for Bd21 test genome. They contain the following commands:
+
+
+```bowtie2-build *.fa Bd21```
+
+```yaha -g Bd21Control_SNPincorp_sgr1_genome.fa```
+
+working with test Bd1-1 reads (10k reads) for tepid check.
+
+trying to get python modules setup. Nightmare so far
+
+Ended up going with local python 2.7.12 installation. Somehow got TEPIDs ```setup.py install``` to work. Still unclear exactly how. I don't udnerstand how to get python setup correctly when there are too many fucking versions all the time.
+
+It might be working, but it hangs. The job submission does not throw an error. It just sits there running (for test data that should take less than a min). From watching an interactive job, it is not stalled out. Just EXTREMELY slow at the yaha step. Will have to look int oit.
+
+Rest of pipeline seems to work, trying it on Bd1-1_WGS sample now. Set walltime to 24hr given the lack of speed seen with the test.
+
+
+
+#Nov 30th, 2016
+---
+
+Many updates lately on a variety of projects.
+
+###1. BVZ0049 high-depth sequencing of SP1
+I got back the high-depth sequencing of SP1 on the HiSeq 2000. The BRF ran things quickly and I received the data within a few weeks. Overal things look good. Although the pooling is not perfect (as expected), the spiking in of samples did boost many of the lower yielding samples from before. Perhaps a bit too much in some cases:
+
+<img src=./bioinformatics_notebook_images/2000_vs_2500_reads.png width=800x>
+
+Light blue highlights those that were spiked in for resequencing
+
+So basically, almost all samples have over 10mil reads. That's a good start!
+
+###2. Sequencing of Plate L1 for BVZ0049
+I also created libraries for plate L1. This was done in two batches of 48 samples each. The subsequent pool (92 samples?) was sequenced on the HiSeq 2500 and had a rapid turn around. I am currently aligning it.
+
+###3. Proper organisation of sequencing data for publicaiton, analysis, and all things
+For BVZ0049, I am determined to create a proper reproducable set of scripts to conduct the entire analysis. The first goal is to push all sequencing data that I receive to the NCBI SRA first (rather than do it afterwards). In this way I can work to conduct my analysis by downloading the SRA data (as anyone else would) and verify that the results are correct.
+
+The NCBI submission portal has been updated recently to attempt to make the process a bit more streamlined. It is still a nightmare with poor and old outdated documentation that needs to be removed.
+
+It follows three setps:
+
+1. Create a BioProject for the overarching experimental design and project you are working on
+2. Create (in batch) BioSamples that identify the biological 'thing' - in my case an accession - that you are working on. These are all linked to the BioProject created above.
+3. Create SRA submission (runs) that link to the BioSamples and BioProject. Preload fastq.gz files to NCBI via FTP and complete the bulk submission form to finalize.
+
+To date I have put L1, L5t, SP1 (2500), and SP1 (2000) data all on SRA under project PRJNA349755
+
+A unique aspect of my analysis goal is that hte data must be public for me to have access to it in my scripts. So I'm pushing everything to public ahead of time. I don't care anymore about people 'stealing' anything. It's all fair game and public funds = public data.
+
+I also learned that even when SRA runs are made public, it takes some days for them to 'appear' under the NCBI FTP site for direct downloads. For instance, SRA files an be accessed through the SRAtools (```fastq-dump``` or ```prefetch```). However, these methods have their own annoyances in regards to where data is stored. I prefer to go through the direct sra file download using the syntax:
+
+```
+for SRAFILE in $SRALIST
+do
+    wget -N ftp://ftp-trace.ncbi.nih.gov/sra/sra-instant/reads/ByRun/sra/SRR/${SRAFILE::-4}/${SRAFILE}/${SRAFILE}.sra
+done
+```
+
+If given a list of SRA run IDs (SRR1234567), you can find them through te above path in which you go to ```.....SRR/SRR123/SRR1234567/SRR1234567.sra```
+
+They all appear there now so far, so I can begin planning the scripts to perform bulk downloads, converting into fastq files, and moving forward with analysis.
+
+###4. Creating SNP-corected genomes for BVZ0049
+One of the annoyances with bisulfite sequencing is that mapping efficency is often quite low. This is in part to the fact that you are working in three-base-space rather than four. There is also the chance that real polymorphisms that exists in your sample compared to the reference may influence methylation calls as incorrect methylation levels. In the pilot experiment (BVZ0028) we had the ability to map each of the seven diverse inbred lines to SNP-corrected versions of the v1.2 reference genome. This consists of the official Bd21 genome in which all identified SNPs (as they have chromosomal positional information) are used to replace the ```REF``` base call with the ```ALT``` from the SNP identification for each line. The genomes are all then identical except for the peppering of SNP bases that have been replaced.
+
+These SNP-corrected genomes will hopefully boost the mapping efficency a bit and also allow us to mitigate any sisues in the bisulfite data due to polymorphisms.
+
+There is a nice part of ```GATK``` that can perform this step [FastaAlternateReferenceMaker](https://software.broadinstitute.org/gatk/guide/tooldocs/org_broadinstitute_gatk_tools_walkers_fasta_FastaAlternateReferenceMaker.php)
+
+It requires the reference, as well as a ```VCF``` files containing the variants. This is where the problem lies at the moment.
+
+The SNPs that have been used to date in identifying the samples for BVZ0049 were made by Jared ~2 years ago. They also were made through TASSEL which does not, by default, export VCF files. I also need to make sure that I have SNPS that are 'reference-based' in that they have positional information to allow the replacement. Jared is apparently working on updating these SNP lists and will create VCF files. Hopefully this is true as I would like to use the data that is final for whatever his manuscript is using. I want our science to be cohesive and comparable. I also don't want to try calling SNPS myself for no reason.
+
+###5. Using TEPID on Paired-End Nextera Brachypodium data
+Norman recently moved forward with creating whole genome shotgun (WGS) data on over 100 Brachypodium samples in the lab as a test of the nextera protocol as well as some new data to try calling SNPs. This data is perfect for trying to identify transposable element variants across some of the same BdTR lines that are used in BVZ0049. Therefore I have been trying to get Tim Stuart's [TEPID](https://github.com/ListerLab/TEPID) pipeline up and running on edmund.
+
+TEPID has some fairly strict software version requirements (samtools v1.2 only for example) which were a headache to pull together. However it does seem to be working through the ```tepid-map``` and ```tepid-discover``` steps of the pipeline. I am currently running these steps across all of the samples. Once done, I will collapse insertiosn and deletions and attempt to perform the genotyping step of TEPID. My hope is to create a final dataframe of all accessions and all TEPID calls with presence/absence calls for each. This will be a cool dataset to explore and compare to the Arabidopsis work as well as set a pilot for performing more TEPID analysis on diverse grass species.
 
 #Oct 19th, 2016
 ---
