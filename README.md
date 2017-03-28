@@ -1,3 +1,48 @@
+#March 24th, 2017
+---
+Justin has some minion data for our digestion / gbs-style attempt with jasmine. He dropped it off this morning. 
+
+###Goals:
+- Call bases for these reads
+- Identify if the reads are any good to begin with
+- See if there is any evidence for barcodes being present
+- see if barcodes match species that were used as input DNA samples
+
+-
+The data has come in two batches:
+- gbs folder has 20,300 fast5 files
+- GBS2 folder has 44,575 fast5 files
+
+These files were not basecalled initially. the first set of reads were pushed to metrichor for 1D basecalling (no barcodes, as we are not using the ONT standards)
+
+Also trying local basecalling minion data with albacore on edmund:
+
+https://community.nanoporetech.com/protocols/albacore-offline-basecalli/v/abec_2003_v1_revj_29nov201/run-albacore-on-linux
+
+install instructions via ```pip3``` and `.whl` seemed to work. Can run on folder of fast5 files as follows:
+```read_fast5_basecaller.py --input . --worker_threads 12 --save_path ../ --config FLO-MIN106_LSK108_linear.cfg```
+
+the config is a provided file designed for 1D reads on the latest flowcell chemistry.
+
+###Stage 2: What comes out
+
+Albacore on `gbs` provided 9302 reads, however input was truncated at 14,157 fast5 files for some reason. Will re-attempt this evening.
+
+
+A shit script to hunting for perfect matches to kmers in minion GBS data:
+```
+kmer=$(python kmer_gen.py | sed "s/', '/ /g" | sed "s/\['//g" | sed "s/']//g")
+```
+
+```
+for i in $kmer; do
+count=$(grep "^$i" prelim_basecalls2.fastq | wc -l);
+end=$(grep "$i$" prelim_basecalls2.fastq | wc -l);
+printf "$i\t$count\t$end\n";
+done > temp_kmer_count
+
+```
+
 #Dec 2nd, 2016
 ---
 
