@@ -1,6 +1,6 @@
 #March 24th, 2017
----
-Justin has some minion data for our digestion / gbs-style attempt with jasmine. He dropped it off this morning. 
+___
+Justin has some minion data for our digestion / gbs-style attempt with jasmine. He dropped it off this morning.
 
 ###Goals:
 - Call bases for these reads
@@ -20,7 +20,9 @@ Also trying local basecalling minion data with albacore on edmund:
 https://community.nanoporetech.com/protocols/albacore-offline-basecalli/v/abec_2003_v1_revj_29nov201/run-albacore-on-linux
 
 install instructions via ```pip3``` and `.whl` seemed to work. Can run on folder of fast5 files as follows:
-```read_fast5_basecaller.py --input . --worker_threads 12 --save_path ../ --config FLO-MIN106_LSK108_linear.cfg```
+```bash
+read_fast5_basecaller.py --input . --worker_threads 12 --save_path ../ --config FLO-MIN106_LSK108_linear.cfg
+```
 
 the config is a provided file designed for 1D reads on the latest flowcell chemistry.
 
@@ -30,11 +32,11 @@ Albacore on `gbs` provided 9302 reads, however input was truncated at 14,157 fas
 
 
 A shit script to hunting for perfect matches to kmers in minion GBS data:
-```
+```bash
 kmer=$(python kmer_gen.py | sed "s/', '/ /g" | sed "s/\['//g" | sed "s/']//g")
 ```
 
-```
+```bash
 for i in $kmer; do
 count=$(grep "^$i" prelim_basecalls2.fastq | wc -l);
 end=$(grep "$i$" prelim_basecalls2.fastq | wc -l);
@@ -44,17 +46,17 @@ done > temp_kmer_count
 ```
 
 #Dec 2nd, 2016
----
+___
 
 Still trying to learn about using python, pip install, and modules on raijin
 
-TEPID wants Python 2.7. I can load that via a module 
+TEPID wants Python 2.7. I can load that via a module
 
 `module load python/2.7.11`
 
 This loading of python also provides me with `pip` so I can perform the module installation that is required:
 
-```
+```bash
 cd $HOME/bin/TEPID
 pip install -r requirements.txt --user
 ```
@@ -121,8 +123,8 @@ READ1FILE=($(ls *R1_001.fastq.gz))
 for FILE in "${READ1FILE[@]}"
 do
 	SAMPLENAME=(${FILE//-WGS/ })
-	echo ${SAMPLENAME[0]}	
-	
+	echo ${SAMPLENAME[0]}
+
 	mkdir $SAMPLENAME
 	mv ${SAMPLENAME}* $SAMPLENAME
 	mv deletion_reads_${SAMPLENAME}* $SAMPLENAME
@@ -136,14 +138,14 @@ done
 
 can run to create poly_te file for step 3:
 
-```
+```python
 python $HOME/bin/TEPID/Scripts/merge_insertions.py -f insertions
 python $HOME/bin/TEPID/Scripts/merge_deletions.py -f deletions
 ```
 
-Now to sort out the refinement step (Step 3)...
+Now to sort out the refinement step (Step 3)
 
-```
+```bash
 for FILE in $(ls -d */)
 do
     ID=${FILE::-1}
@@ -151,10 +153,12 @@ do
     tepid-refine -i ../insertions.bed -d ../deletions.bed -p 12 -t /home/steve/bin/TEPID/Annotation/Brachypodium/Brachy_TE_v2.2.bed.gz -n $ID -c ${ID}.bam -s ${ID}.split.bam -a ../ALL_SAMPLES.txt
     cd ../
 done
-```
-Refinement done, can now merge outputs once again (had to ask Tim on how to do this one...
 
 ```
+
+Refinement done, can now merge outputs once again (had to ask Tim on how to do this one...
+
+```bash
 for FILE in $(ls -d */)
 do
     ID=${FILE::-1}
@@ -177,7 +181,7 @@ python /home/steve/bin/TEPID/Scripts/genotype.py -i -a ambiguous_deletion.bed -m
 
 
 #Dec 1st, 2016
----
+___
 
 ###Looking to get TEPID up and running on Raijin for some batch processing
 Setup notes:
@@ -189,9 +193,13 @@ bedtools, bowtie2, and python already installed
 making submission scripts to create bowtie2 and yaha index for Bd21 test genome. They contain the following commands:
 
 
-```bowtie2-build *.fa Bd21```
+```
+bowtie2-build *.fa Bd21
+```
 
-```yaha -g Bd21Control_SNPincorp_sgr1_genome.fa```
+```
+yaha -g Bd21Control_SNPincorp_sgr1_genome.fa
+```
 
 working with test Bd1-1 reads (10k reads) for tepid check.
 
@@ -206,7 +214,7 @@ Rest of pipeline seems to work, trying it on Bd1-1_WGS sample now. Set walltime 
 
 
 #Nov 30th, 2016
----
+___
 
 Many updates lately on a variety of projects.
 
@@ -267,7 +275,7 @@ Norman recently moved forward with creating whole genome shotgun (WGS) data on o
 TEPID has some fairly strict software version requirements (samtools v1.2 only for example) which were a headache to pull together. However it does seem to be working through the ```tepid-map``` and ```tepid-discover``` steps of the pipeline. I am currently running these steps across all of the samples. Once done, I will collapse insertiosn and deletions and attempt to perform the genotyping step of TEPID. My hope is to create a final dataframe of all accessions and all TEPID calls with presence/absence calls for each. This will be a cool dataset to explore and compare to the Arabidopsis work as well as set a pilot for performing more TEPID analysis on diverse grass species.
 
 #Oct 19th, 2016
----
+___
 
 With some of the final logistics of ordering for BVZ0049 complete, I can begin to plan the subsequent labwork and analyses.
 
@@ -302,7 +310,7 @@ I still have high hopes that the vast majority of samples will be sequenced with
 
 ##C
 #Oct 4th, 2016
----
+___
 
 Another MinION run
 
@@ -317,7 +325,7 @@ I also leared that any air bubble = instant dead pores. The last priming step is
 This is also a test of some old Bd21 Brachypodium distachyon gDNA that was prepped in our lab over a year ago using Qiagen kits. This is our standard method of extracting gDNA in the lab, and it will be interesting to see how it sequences compared to CTAB preps such as what Ben performs.
 
 #Sept 20th, 2016
----
+___
 
 ###Brachypodium genome version nightmares
 
@@ -388,9 +396,9 @@ Tim used the TE annotation and SNP-corrected genomes I provided back at the time
 
 This also notes that the Genome Research paper was completed with v1.2 data and annotations.
 
----
+___
 #Sept 2nd, 2016
----
+___
 
 ###More MinION analyses
 ###TAKEHOMES:
@@ -421,7 +429,7 @@ All files are uploaded (2pm), however I don't have a clue if the actual steps in
 I'm having trouble trying to track down where all the reads go. I have downloaded the same number as I uploaded:
 
 | type | pass | fail | total |
-|------|------|------|-------|
+|______|______|______|______-|
 | mux | 22 | 70 | 92 |
 | lamda | 26685 | 11712 | 38397 |
 | | | **Total** | 38489 |
@@ -430,7 +438,7 @@ I want a flowchart of where these numbers end up, as there are different numbers
 
 
 #Aug 31st, 2016
----
+___
 ###Working on MinION data analysis
 ###TAKEHOMES:
 ```
@@ -475,7 +483,7 @@ MinKNOW (as of v1.0.2) can perform basecalling on your local machine for 1D chem
  sequence_length, start_time, duration, mean_qscore, strand_score}
 |
 ```
-Although this file format is likely useful, it requires some specific software to fully parse. 
+Although this file format is likely useful, it requires some specific software to fully parse.
 
 As an HDF5 file format, we can parse it in R using some bioconductor libraries such as [rhdf5](http://bioconductor.org/packages/release/bioc/html/rhdf5.html)
 
@@ -592,9 +600,9 @@ samtools flagstat test_lamda.sorted.bam
 Other software that may be useful:
 NanoOK [https://documentation.tgac.ac.uk/display/NANOOK/NanoOK](https://documentation.tgac.ac.uk/display/NANOOK/NanoOK)
 poRe [https://github.com/mw55309/poRe_docs](https://github.com/mw55309/poRe_docs)
----
+___
 #August 30th, 2016
----
+___
 ###Performed Lamda control DNA MinION sequencing using the Rapid sequencing kit (SQK-RAD001)
 ###TAKEHOMES:
 ```
@@ -613,7 +621,7 @@ Flowcell FAD23939 had air bubbles across sensor pore array (the part that matter
 
 ###FAD23939 QC pore counts to date:
 | Pore group | Pore count - Aug 11th | Pore count - Aug 30 (bubbles) | Pore count - Aug 30 (buffer movement, no bubbles) |
-|------------|------------|---|---|
+|____________|____________|___|___|
 | 1          |         361|4 | 0|
 | 2          |         317|1 | 0|
 | 3          |         210|0 | 0|
@@ -630,7 +638,7 @@ Given this mess, I used the other flowcell that was provided (FAD24036) for the 
 
 ###FAD24036 QC pore counts to date:
 | Pore group | Pore count - Aug 11th | Pore count - Aug 30 QC | Pore count - Aug 30 in sequencing |
-|------------|------------|---|---|
+|____________|____________|___|___|
 | 1          |         506|505|498|
 | 2          |         448|448|439|
 | 3          |         308|313|275|
@@ -639,7 +647,7 @@ Given this mess, I used the other flowcell that was provided (FAD24036) for the 
 
 So the pore counts appeared just fine and fairly consistant going into the sequencing itself. No bubbles were visable prior to sequencing.
 
-I seledted to have MinKNOW perform local basecalling rather than using Metrichor to call bases in the cloud. Therefore, sequencing commenced using the MinKNOW protocol ```NC_6Hr_Lambda_Burn_In_Run_FLO_MIN104_plus_1D_Basecalling.py```. Everything appeared to work properly, however the tab for local basecalling metrics (quality and read length) never filled in. The overall read size histogram did though. 
+I seledted to have MinKNOW perform local basecalling rather than using Metrichor to call bases in the cloud. Therefore, sequencing commenced using the MinKNOW protocol ```NC_6Hr_Lambda_Burn_In_Run_FLO_MIN104_plus_1D_Basecalling.py```. Everything appeared to work properly, however the tab for local basecalling metrics (quality and read length) never filled in. The overall read size histogram did though.
 
 <img src=./bioinformatics_notebook_images/lamda_seq_stats.png height=650x>
 
@@ -656,7 +664,7 @@ These bubbles remained after washing and returning to fridge:
 
 
 #Aug 9th, 2016
----
+___
 
 Getting B stacei annotation files created for Beth
 
@@ -703,7 +711,7 @@ write.table(out,'Bsta.gene.bed',sep='\t',row.names=F,quote=F,col.names=F)
 ```
 
 #Aug 8th, 2016
----
+___
 
 MinION arrived
 
@@ -721,7 +729,7 @@ Also going through the test data upload of Metrichor to confirm that bass callin
 
 
 #Aug 4th, 2016
----
+___
 
 Attempting to run DSS on C24 and Ler CG methylation as I had to remap Ler yesterday.
 
@@ -734,7 +742,7 @@ So you are required to use data smoothing when you do not have biological replic
 This results in 10224 CG DMRs between C24 and Ler. I have passed them to Ian in case he wants to compare with our tile approach.
 
 #Aug 3rd, 2016
----
+___
 
 ####Preparing Ian's samples for DSS analysis
 
@@ -742,27 +750,27 @@ We may need to attempt using DSS (bioconductor.org) to call DMRs across the C24 
 
 There is a specific file type that is wanted for input into DSS. From the documentation:
 
----
+___
 DSS requires data from each BS-seq experiment to be summarized into following information for each CG position:
-- chromosome number, 
-- genomic coordinate, 
-- total number of reads, 
-- and number of reads showing methylation. 
+- chromosome number,
+- genomic coordinate,
+- total number of reads,
+- and number of reads showing methylation.
 
 For a sample, this information are saved in a simple text file, with each row representing a CpG site. Below shows an example
 of a small part of such a file:
 
 | chr   | pos     | N  | X  |
-|-------|---------|----|----|
+|______-|_________|___-|___-|
 | chr18 | 3014904 | 26 | 2  |
 | chr18 | 3031032 | 33 | 12 |
 | chr18 | 3031044 | 33 | 13 |
 
----
+___
 
 So, we can make this data from our bismark cov files
 
-```{bash}
+```bash
 #from bismark alignments output folder...
 awk '{print $1"\t"$2"\t"$5+$6"\t"$5}' C24_CHH.bed.bismark.cov > C24_CHH.dss.txt
 awk '{print $1"\t"$2"\t"$5+$6"\t"$5}' C24_CHG.bed.bismark.cov > C24_CHG.dss.txt
@@ -801,7 +809,7 @@ write.table(dmrs.smoothed,'C24vsLer_CGDMRS.dss.txt',sep='\t',row.names=F)
 ```
 
 #July 29th, 2016
----
+___
 ###Justin Borevitz - 'omics for selection
 
 __Plant climate__
@@ -814,7 +822,7 @@ __'Pre-breeding for Adaptation'__
 Geno - Pheno - Enviro triangle
 
 ```{}
-Better understanding statistical models that can association and predict phenotype from genotype. 
+Better understanding statistical models that can association and predict phenotype from genotype.
 
 A whole lot of talk, little substance so far
 ```
@@ -856,7 +864,7 @@ Association expression level with phenotypes across multiple environments
 
 
 #July 19th, 2016
----
+___
 
 Tim Stuart has provided new files to attempt the trans TE-DMR analysis for his manuscript. Previously, both TEPID insertions and deletions were combined into a 'TE_poly' file containing both types of elements. However, further analysis by Tim has indicated that it may be worthwhile to look at these two types of variants seperatly. Beyond this, there was an issue with the methylation DMR files indicating no coverage as a value of 0, which could seriously screw things up.
 
@@ -876,7 +884,7 @@ To begin, dataset accessions are confirmed identical resulting in 136 accessions
 TE variants are subset to only those 'common' variants with a minor-allele-frequence > 3% (4 accessions). This substantially cuts down on the number of TE variants that we can test:
 
 | TE set     | raw variants | >3% MAF | proportion kept |
-|------------|--------------|---------|-----------------|
+|____________|____________--|_________|_______________--|
 | insertions | 15077        | 2782    | 0.185           |
 | deletions  | 5856         | 2859    | 0.488           |
 
@@ -887,7 +895,7 @@ We can also calculate the FDR for each of these association tests by counting th
 Which gives us....not the best FDR in the world:
 
 | FDR %  | individual r2 values | sum r2 values | individual binary states | sum binary states |
-|--------|----------------------|---------------|--------------------------|-------------------|
+|______--|_____________________-|_______________|________________________--|__________________-|
 | C_ins  | 14.38                | 87.77         | 14.38                    | 77.77             |
 | C_del  | 17.17                | 87.65         | 17.16                    | 81.29             |
 | CG_ins | 7.55                 | 52.54         | 7.55                     | 21.62             |
@@ -896,7 +904,7 @@ Which gives us....not the best FDR in the world:
 Even so, we can get a count of our punative trans-associated TE variants for each contrast:
 
 | possible trans Tes | count | max DMRs it hits | max %DMRs it hits |
-|--------------------|-------|------------------|-------------------|
+|__________________--|______-|__________________|__________________-|
 | C_ins              | 126   | 526              | 3.901             |
 | C_del              | 155   | 457              | 3.389             |
 | CG_ins             | 37    | 2021             | 5.019             |
@@ -946,20 +954,20 @@ I imagine that beyond this would be a magical world of VMs that someone could sp
 
 
 #May 9th, 2016
-----
+___-
 
 Trying to understand _Probability Theory - The Logic of Science_ by E.T. Jaynes
 
 ###Probability defined for:
-- Frequency & Fair odds 
+- Frequency & Fair odds
 (dice rolls, gambling)
 
-vs 
+vs
 
 - credible, sound judgements
 (finding expectations from incomplete information)
 - Kolmogorov
-- 
+-
 ###Statistics
 - from the state for mathematical analysis of affairs
 - defining measurement error
@@ -968,7 +976,7 @@ vs
 Laplace
 
 - Linear regression
-- Distribution of errors 
+- Distribution of errors
 
 Inference (Fisher & Pearson)
 
@@ -986,11 +994,11 @@ Given all of this, what exactly is probability in the real world?
 
 ###Freqentist
 
-- counting, _measurements_ of a physical prop, sampling, 
+- counting, _measurements_ of a physical prop, sampling,
 - This only really makes sense when we can make the measurements
 vs
 
-###Subjectionist 
+###Subjectionist
 
 __'A degree of belief'__ - something we all have
 
@@ -1010,22 +1018,22 @@ Hypothesis to Data (test hypothesis to explain our data) is not good. We want __
 
 ###Resolves about 400 years of prob theory by extending logic!
 
-----
+___-
 
 #April 18th, 2016
-----
+___-
 
 Created folder structure on local machine for IGV sessions for Joanne's methylc-seq data visualizations.
 
 bis snp snp-calling from bisulfite sequencing data for Diep's work.
 
-----
+___-
 #April 14th, 2016
-----
+___-
 The alignments of Joanne's Methyl-seq data has been completed on edmund. The summary information is provided below:
 
 | Input fastq | Sample | ref genome | method | bismark ver | samtools ver | total reads | flt reads | % unique aligned | unique map | multi-map | no-map | %CG | %CHG | %CHH |
-|---------------------|------------------------|---------------|--------------------------------|----|---------|-----------------|----------|----------|------|----------|---------|---------|------|-----|-----|
+|_____________________|________________________|_______________|______________________________--|___-|_________|_______________--|_________-|_________-|______|_________-|_________|_________|______|___--|___--|
 | Col_mock_C_R1.fastq.gz | Col_mock_3DAI | ../../genomes/TAIR10/assembly/ | se | v0.13.0 | 1.1-26-g29b0367 | 32705946 | 32652653 | 78.1 | 25507247 | 1958063 | 5187343 | 23.2 | 7.5 | 2.2 |
 | Col_Fox_D_R1.fastq.gz  | Col_Fox_3DPI  | ../../genomes/TAIR10/assembly/ | se | v0.13.0 | 1.1-26-g29b0367 | 29501104 | 29460765 | 67.6 | 19925070 | 5170754 | 4364941 | 21.8 | 7.0 | 2.1 |
 | rdd_Fox_B_R1.fastq.gz  | rdd_Fox_3DPI  | ../../genomes/TAIR10/assembly/ | se | v0.13.0 | 1.1-26-g29b0367 | 29645007 | 29612191 | 67.7 | 20055251 | 5865639 | 3691301 | 23.0 | 7.0 | 2.0 |
@@ -1040,7 +1048,7 @@ grep "ChrC" *CHH.bed.bismark.cov | awk '{ met+= $5} { unmet += $6} { total = met
 This results in the folowing conversion rates (higher the better):
 
 | Sample | Conversion Rate (%) |
-|--------|-----------------|
+|______--|_______________--|
 | Col_mock_3DPI | 99.6488 |
 | Col_Fox_3DPI | 99.6395 |
 | rdd_mock_3DPI | 99.6367 |
@@ -1060,7 +1068,7 @@ for(i in 1:3){
   files=dir(pattern=paste('*',context[i],'.bed.bismark.cov',sep=''))
   input=read.delim(files[1],head=F)
   colnames(input)[4:6]=paste(files[1],names(input)[4:6],sep='')
-  
+
   for(q in 2:length(files)){
     add=read.delim(files[q],head=F)
     colnames(add)[4:6]=paste(files[q],names(add)[4:6],sep='')
@@ -1076,9 +1084,9 @@ Also did CHG 40%; CHH 10%
 
 Have to do some serious filtering
 
-----
+___-
 #April 7th, 2016
-----
+___-
 
 Today I am attempting to make an annotation file of TAIR10 genes that have a flanking TE. This is to better define genes that fall on a euchromatin / heterochromatin boundary within the genome. I will also add information regarding orientation of chromatin in relation to the geen (5prime / 3prime / strand).
 
@@ -1126,8 +1134,8 @@ We can now go look into this bedops output to see the results:
 ~~~r
 data = read.delim('test.output',head=F,sep='\t')
 
-#genes with nothing upstream are writted out with NA 
-#however it does not match full formatting. 
+#genes with nothing upstream are writted out with NA
+#however it does not match full formatting.
 #Therefore, we can pull these columns seperatly.
 
 no.upstream=subset(data,is.na(data$V9)==T)
@@ -1155,10 +1163,10 @@ A local view to highlight it:
 
 The output file has been creaed as ```TAIR10_tete_gene.bed``` containing 3134 genes along with a file of genes with TEs flanking one side in ```TAIR10_teoneside_gene.bed``` containing 8762 genes.
 
-----
+___-
 
 #April 6th, 2016
-----
+___-
 
 Today I have attempted to align Joanne's bisulfite sequencing data of 3DPI Col-0 and _rdd_ mutants for both mock and control samples. This data has been passed to myself and Peter Crisp, along with sRNA sequencing data (1/3/6 DPI) and mRNA-seq (3 DPI) data.
 
@@ -1167,5 +1175,3 @@ The fastq files have been passed via my processing script as single-end sequenci
 ```
 /home/steve/scripts/wgbs_pipelinev0.4.sh -se <input fastq> ../../../genomes/TAIR10/assembly/ <outname>
 ```
-
-
