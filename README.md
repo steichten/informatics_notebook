@@ -1,3 +1,27 @@
+
+# April 4th, 2017
+___
+
+- Picked up BVZ0049 L7 sequencing data from BRF. To be loaded onto raijin
+
+# April 3rd, 2017
+___
+
+
+Getting threshold value from Riyans GWAS script for Pip
+
+```R
+if(file.exists("bvz0055_repAve_pm.txt")){
+   cv<- read.table("bvz0055_repAve_pm.txt",header=FALSE)
+      cv<- quantile(apply(cv,1,max,na.rm=TRUE),0.95)
+      cv<- cv/2/log(10)
+}
+```
+
+```bash
+awk '{max=$1;for(i=2;i<=NF;i++){if($i > max) max = $i}print max}' temp | Rscript -e 'quantile( as.numeric(readLines("stdin")),0.95)/2/log(10)'
+```
+
 # March 24th, 2017
 ___
 Justin has some minion data for our digestion / gbs-style attempt with jasmine. He dropped it off this morning.
