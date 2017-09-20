@@ -1,3 +1,49 @@
+# May 24th 2017
+___
+
+Required in shell to get vcf-consensus working as a perl script
+
+```
+PATH=$PATH:/opt/apps/htslib-1.3.2/bin/tabix
+PERL5LIB=$PERL5LIB:/home/steve/bin/vcftools-0.1.15/src/perl
+```
+
+# May 15th, 2017
+
+___
+
+##  Trying to make some SNP corrected genomes for DECRA project
+
+With methylomes in hand, it may be nice to try and have SNP-corrected genomes to map to rather than the Bd21 reference genome.
+
+To try and do this, we have some nextera sequence data for a subset of the samples. I will attempt to use these to create SNP-corrected genomes _per family_ to have something that is closer to the actual genetic background. The goal here would be to take the gDNA-seq data, call varients, pull varients which are common to a family, then use those to SNP-correct the reference to createa family fasta for subsequent alignment of methylation data.
+
+
+
+`bcftools`, `samtools`, `htslib` already exist as modules on edmund 1.3.4. Otherwise could grab them here:
+
+```
+wget https://github.com/samtools/htslib/releases/download/1.4.1/htslib-1.4.1.tar.bz2
+wget https://github.com/samtools/samtools/releases/download/1.4.1/samtools-1.4.1.tar.bz2
+wget https://github.com/samtools/bcftools/releases/download/1.4.1/bcftools-1.4.1.tar.bz2
+
+```
+General outline
+
+alignment > sam
+sam > bam > sorted bam
+samtools mpileup | bcftools call -mv -Ob -o calls.bcftools
+
+from this, need to filter to common varients found within family lines
+
+# May 1st, 2017
+___
+
+All BVZ0049 low-coverage bisulfite sequencing is completed it seems. Scripts in place to rename. Question is, do I move to make all analysis scripts developed for NCI use or in general?
+
+- qsub job to download SRA files from NCBI on `copyq`
+- qsub job to `fastq-dump` sra files into fastq.gz
+- qsub job to align reads (already have)
 
 # April 4th, 2017
 ___
