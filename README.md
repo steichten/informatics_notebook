@@ -1,3 +1,129 @@
+
+# Sept 21st, 2017
+___
+
+More attempts at `methimpute`
+
+Looking into DSS for DMR calling for DECRA project.
+
+DSS files can be made from bismark cov files through a bit of modification:
+
+```
+test=$(find -name "*CpG*.cov")
+
+for FILE in $test; do
+cat $FILE | awk -v OFS='\t' 'BEGIN{print "chr","pos","N","X"}; {print $1,$2,$5+$6,$5}' > ${FILE}.dss
+done
+```
+
+These files contain four columns for chromosome (chr), position (pos), number of total sites (N), and number of methylated calls (X)
+
+lets take a test comparing two family members of BdTR1 (BdTR1a and BdTR1b):
+
+
+```{r}
+r11=read.delim('S60102_CpG.gz.bismark.cov.gz.dss',head=F)
+r12=read.delim('S60193_CpG.gz.bismark.cov.gz.dss',head=F)
+r13=read.delim('S60262_CpG.gz.bismark.cov.gz.dss',head=F)
+r21=read.delim('S60179_CpG.gz.bismark.cov.gz.dss',head=F)
+r22=read.delim('S60181_CpG.gz.bismark.cov.gz.dss',head=F)
+r23=read.delim('S60273_CpG.gz.bismark.cov.gz.dss',head=F)
+
+names(r11)=c('chr','pos','N','X')
+names(r12)=c('chr','pos','N','X')
+names(r13)=c('chr','pos','N','X')
+names(r21)=c('chr','pos','N','X')
+names(r22)=c('chr','pos','N','X')
+names(r23)=c('chr','pos','N','X')
+
+library(DSS)
+```
+
+as everything has replicates, there should be an attempt to call DMRs at these levels:
+
+1. Within family comparisons - 
+2. across family comparisons
+3. Across planting conditions
+4. Across accession environment / altitude / something like that?
+5. 
+# Sept 20th, 2017
+___
+
+Attemping to run `methImpute`
+
+[methIMPUTE](https://github.com/ataudt/methimpute)
+
+as noted from bioRxiv and presented @ 40th NPS
+
+[bioRxiv record](https://www.biorxiv.org/content/early/2017/09/18/190223)
+
+had to sort some version issues with bioconductor and R to get things up and running.
+
+```{r}
+sessionInfo()
+R version 3.3.3 (2017-03-06)
+Platform: x86_64-apple-darwin13.4.0 (64-bit)
+Running under: OS X Yosemite 10.10.5
+
+locale:
+[1] en_AU.UTF-8/en_AU.UTF-8/en_AU.UTF-8/C/en_AU.UTF-8/en_AU.UTF-8
+
+attached base packages:
+[1] parallel  stats4    stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] methimpute_0.99.0    ggplot2_2.2.1        GenomicRanges_1.26.4 GenomeInfoDb_1.10.3  IRanges_2.8.2       
+[6] S4Vectors_0.12.2     BiocGenerics_0.20.0 
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_0.12.12       magrittr_1.5       XVector_0.14.1     zlibbioc_1.20.0    munsell_0.4.3      cowplot_0.8.0.9000
+ [7] colorspace_1.3-2   rlang_0.1.2        stringr_1.2.0      plyr_1.8.4         tools_3.3.3        grid_3.3.3        
+[13] gtable_0.2.0       digest_0.6.12      lazyeval_0.2.0     tibble_1.3.4       reshape2_1.4.2     bitops_1.0-6      
+[19] RCurl_1.95-4.8     labeling_0.3       stringi_1.1.5      scales_0.5.0       Biostrings_2.42.1  minpack.lm_1.2-1 
+```
+
+Following the vinette seemed to work just fine
+
+Make attempts with S60000 and S60001 to see if I can impute methylation data from the lowcoverage data for BVZ0049
+
+```{r}
+
+library(methimpute)
+
+file = 'Desktop/test.sam.CX_report.txt'
+
+bismark.data = importBismark(file)
+
+fasta.file = 'Desktop/Bd21Control_SNPincorp_sgr1_genome.fa'
+cytosine.positions = extractCytosinesFromFASTA(fasta.file, contexts = c('CG','CHG','CHH'))
+
+methylome = inflateMethylome(bismark.data,cytosine.positions)
+
+distcor = distanceCorrelation(methylome)
+fit = estimateTransDist(distcor)
+print(fit)
+
+model = callMethylation(data = methylome, transDist = fit$trans.Dist)
+
+```
+
+Looks to make the appropriate fit:
+
+<img src=./bioinformatics_notebook_images/methimpute1.png width=800x>
+
+However, it keeps failing at the model step:
+
+```{r}
+model = callMethylation(data = methylome, transDist = fit$trans.Dist)
+Adding distance ... 7.1s
+Adding transition context ... 46.53s
+Error in transDistvec[1:length(transDistvec)] <- transDist : 
+  replacement has length zero
+```
+Unsure why at this stage. Same failure for S60001
+
+
+
 # May 24th 2017
 ___
 
@@ -7,6 +133,7 @@ Required in shell to get vcf-consensus working as a perl script
 PATH=$PATH:/opt/apps/htslib-1.3.2/bin/tabix
 PERL5LIB=$PERL5LIB:/home/steve/bin/vcftools-0.1.15/src/perl
 ```
+
 
 # May 15th, 2017
 
